@@ -30,10 +30,10 @@
 
 <style>
 :root{
-  /* palette pulled from the poster: dark-to-bright yellow, white type */
-  --acc:#ffc400; --acc-hi:#ffdd33; --acc-dim:#e6a700;
+  /* palette pulled from the poster: dark-to-bright red, white type */
+  --acc:#f5333f; --acc-hi:#ff5c53; --acc-dim:#c41e2a;
   --red:#f5333f;
-  --grad:linear-gradient(120deg,#e6a700 0%,#ffe94d 100%);
+  --grad:linear-gradient(120deg,#8f1017 0%,#ff5c53 100%);
   --gold:#e3ba5c; --gold-hi:#f3d489; --gold-dim:#c69c39; --gold-ink:#1c1408;
   --gold-grad:linear-gradient(120deg,#c99a33 0%,#f3d489 48%,#d8ac45 100%);
   --bg:#0d0908;                   /* page background — warm near-black       */
@@ -89,13 +89,13 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   min-height:95svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:calc(var(--bar) + 2.5rem) 0 3rem;position:relative;overflow:hidden;
   background:
-    radial-gradient(ellipse 120% 70% at 50% -10%,rgba(230,167,0,.30),transparent 62%),
-    radial-gradient(ellipse 90% 55% at 50% 108%,rgba(255,196,0,.16),transparent 68%),
+    radial-gradient(ellipse 120% 70% at 50% -10%,rgba(143,16,23,.30),transparent 62%),
+    radial-gradient(ellipse 90% 55% at 50% 108%,rgba(255,92,83,.16),transparent 68%),
     linear-gradient(180deg,#1a1408 0%,var(--bg) 58%);
 }
 .hero::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 45% at 50% 30%,rgba(255,196,0,.14),transparent 70%);
+  background:radial-gradient(ellipse 70% 45% at 50% 30%,rgba(255,92,83,.14),transparent 70%);
 }
 .hero > *{position:relative;z-index:1}
 
@@ -334,10 +334,10 @@ section{padding-block:5rem}
 /* ─── PITCH BITS: badge, kickers ───────────────── */
 .eyebrow{
   display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;
-  border:1px solid rgba(255,196,0,.45);border-radius:999px;
-  background:linear-gradient(120deg,rgba(230,167,0,.22),rgba(255,221,51,.14));
+  border:1px solid rgba(255,92,83,.45);border-radius:999px;
+  background:linear-gradient(120deg,rgba(143,16,23,.22),rgba(255,92,83,.14));
   padding:.5rem .85rem;
-  font-size:.625rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#ffe08a;
+  font-size:.625rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#ffbdb8;
 }
 .eyebrow .dot{width:.375rem;height:.375rem;border-radius:50%;background:var(--acc);flex:none}
 
