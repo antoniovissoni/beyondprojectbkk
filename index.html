@@ -227,18 +227,28 @@ section{padding-block:5rem}
   position:relative;width:100%;aspect-ratio:9/16;max-height:92svh;
   overflow:hidden;background:var(--panel);
 }
-.promo-video{width:100%;height:100%;object-fit:cover;display:block;background:var(--panel)}
+/* stays out of the render tree (not just transparent) until a frame is
+   decoded — on some devices an unloaded/unready <video> gets promoted to a
+   hardware overlay surface that paints as opaque black regardless of CSS
+   opacity or z-index, so opacity/stacking tricks alone can't hide it */
+.promo-video{position:relative;z-index:0;width:100%;height:100%;object-fit:cover;background:transparent;display:none}
+.promo-video.is-ready{display:block}
 .video-logo{
-  position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);
+  position:absolute;z-index:1;top:38%;left:50%;transform:translate(-50%,-50%);
   width:min(12rem,58%);height:auto;pointer-events:none;
   filter:drop-shadow(0 2px 14px rgba(0,0,0,.55));
 }
+.video-poster{
+  position:absolute;z-index:2;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+  opacity:1;transition:opacity .5s ease;
+}
+.video-poster.is-hidden{opacity:0;pointer-events:none}
 .video-box::after{
-  content:"";position:absolute;left:0;right:0;bottom:0;height:40%;z-index:1;pointer-events:none;
+  content:"";position:absolute;left:0;right:0;bottom:0;height:40%;z-index:3;pointer-events:none;
   background:linear-gradient(180deg,transparent,rgba(6,4,4,.75) 75%);
 }
 .video-cta{
-  position:absolute;left:0;right:0;bottom:1.5rem;z-index:2;
+  position:absolute;left:0;right:0;bottom:1.5rem;z-index:4;
   display:flex;justify-content:center;padding:0 1.5rem;
 }
 .video-cta .hero-cta{width:100%;max-width:22rem;box-shadow:0 6px 20px rgba(0,0,0,.35);text-transform:uppercase;letter-spacing:.03em}
@@ -469,7 +479,8 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
 <!-- ─── VIDEO ──────────────────────────────────────── -->
 <section class="video-feature">
   <div class="video-box" id="promo-video-box">
-    <video id="promo-video" class="promo-video" poster="assets/thumbnail.png"
+    <img class="video-poster" src="assets/thumbnail.png" alt="" width="2000" height="2000" fetchpriority="high" decoding="async">
+    <video id="promo-video" class="promo-video"
            muted loop playsinline preload="none" aria-label="BEYOND Latin party highlight video"></video>
     <img class="video-logo" src="assets/logo-wide.webp" alt="BEYOND" width="1600" height="336" loading="lazy" decoding="async">
     <div class="video-cta">
@@ -840,11 +851,20 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
         then autoplays muted as soon as it's ready ─── */
   var promoBox = document.getElementById('promo-video-box');
   var promoVideo = document.getElementById('promo-video');
+  var promoPoster = promoBox ? promoBox.querySelector('.video-poster') : null;
 
   function loadPromoVideo(){
     if (!promoVideo || promoVideo.dataset.loaded) return;
     promoVideo.dataset.loaded = '1';
-    promoVideo.addEventListener('canplay', function(){
+    /* the video stays display:none (not just transparent) until a frame is
+       actually decoded — on some devices an unready <video> can render an
+       opaque black surface that ignores CSS opacity/z-index, so it needs to
+       be fully out of the render tree, not just hidden behind the poster.
+       a slow or failed load just leaves the thumbnail in place instead of
+       showing a broken/blank box. */
+    promoVideo.addEventListener('loadeddata', function(){
+      promoVideo.classList.add('is-ready');
+      if (promoPoster) promoPoster.classList.add('is-hidden');
       promoVideo.play().catch(function(){});
     }, { once:true });
     promoVideo.src = 'assets/hero_video.mp4';
