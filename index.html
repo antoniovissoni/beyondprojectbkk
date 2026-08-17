@@ -347,7 +347,9 @@ section{padding-block:5rem}
 .qty-opt .meta{flex:1;min-width:0;display:flex;flex-direction:column}
 .qty-opt .n{display:block;font-size:1.0625rem;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:var(--ink)}
 .qty-opt .n small{font-size:.8125rem;font-weight:500;color:var(--ink-3);text-transform:none;margin-left:.45rem}
-.qty-opt .p{display:block;font-size:.9375rem;font-weight:600;color:var(--acc);margin-top:.3rem}
+.qty-opt .p{display:flex;align-items:baseline;gap:.55rem;margin-top:.3rem}
+.qty-opt .p .amt{font-size:.9375rem;font-weight:600;color:var(--acc)}
+.qty-opt .save{font-size:.75rem;font-weight:600;color:#7dd88a}
 .qty-opt .arw{flex:none;color:var(--ink-3);font-size:1.125rem;transition:transform .15s ease,color .15s ease}
 .qty-opt:hover .arw{color:var(--acc);transform:translateX(3px)}
 .qty-opt .ico{width:1.5rem;height:1.5rem;flex:none;color:var(--ink-3);transition:color .15s ease}
@@ -582,13 +584,12 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
       Get your tickets
       <span class="th">ซื้อบัตรของคุณ</span>
     </h2>
-    <p class="lede">Limited early bird tickets available at ฿400. Prices increase soon.</p>
+    <p class="lede">Early bird sold out. Tickets now ฿500 — prices increase soon.</p>
 
     <div class="tiers">
 
-      <!-- Early bird — LIVE -->
-      <a class="tier live" href="https://buy.stripe.com/28EfZa6AVakjden2JN77O11"
-         data-track="ticket" target="_blank" rel="noopener">
+      <!-- Early bird — SOLD OUT -->
+      <div class="tier sold" aria-disabled="true">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
           <rect x="4" y="10.5" width="16" height="10" rx="2.5"/>
           <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/>
@@ -596,13 +597,14 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
         <div class="meta">
           <p class="name">Early bird</p>
           <p class="price">฿400</p>
-          <span class="th">บัตรราคาพิเศษ · รวมเครื่องดื่ม 1 แก้ว · เปิดขายแล้ว</span>
+          <span class="th">บัตรราคาพิเศษ · ขายหมดแล้ว</span>
         </div>
-        <span class="tag">Buy now</span>
-      </a>
+        <span class="tag">Sold out</span>
+      </div>
 
-      <!-- Regular — not open yet -->
-      <div class="tier soon" aria-disabled="true">
+      <!-- Regular — LIVE -->
+      <a class="tier live" href="https://buy.stripe.com/fZu3cobVfbon3DNbgj77O1a"
+         data-track="ticket" target="_blank" rel="noopener">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9.5V7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2.5a2.5 2.5 0 0 0 0 5V17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.5a2.5 2.5 0 0 0 0-5Z"/>
           <path d="M14 6v12" stroke-dasharray="2 2.5"/>
@@ -610,10 +612,10 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
         <div class="meta">
           <p class="name">Regular ticket</p>
           <p class="price">฿500</p>
-          <span class="th">บัตรราคาปกติ</span>
+          <span class="th">บัตรราคาปกติ · รวมเครื่องดื่ม 1 แก้ว · เปิดขายแล้ว</span>
         </div>
-        <span class="tag">Not open</span>
-      </div>
+        <span class="tag">Buy now</span>
+      </a>
 
       <!-- Final release — not open yet -->
       <div class="tier soon" aria-disabled="true">
@@ -630,6 +632,13 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
       </div>
     </div>
 
+    <a class="vip" href="https://luma.com/j7zd0cl5" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 8l4 3.5L12 5l4 6.5L20 8l-1.7 9H5.7L4 8Z"/>
+      </svg>
+      VIP tables
+    </a>
+
     <ul class="incl">
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
@@ -645,7 +654,7 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
       </li>
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
-        <span><b>This price, locked</b> — the next release is ฿500, then ฿600, and prices only go up</span>
+        <span><b>This price, locked</b> — the next release is ฿600, and prices only go up</span>
       </li>
     </ul>
 
@@ -723,7 +732,8 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
 </footer>
 
 <div class="sticky" id="sticky">
-  <a class="s-ticket" href="https://buy.stripe.com/28EfZa6AVakjden2JN77O11" data-track="ticket" target="_blank" rel="noopener">Get ticket · ฿400</a>
+  <a class="s-ticket" href="https://buy.stripe.com/fZu3cobVfbon3DNbgj77O1a" data-track="ticket" target="_blank" rel="noopener">Get ticket · ฿500</a>
+  <a class="s-vip" href="https://luma.com/j7zd0cl5" target="_blank" rel="noopener">VIP</a>
 </div>
 
 <!-- ─── QUANTITY PICKER ────────────────────────────── -->
@@ -744,8 +754,8 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
     <div class="qty-list" id="qty-list"><!-- built by JS --></div>
 
     <p class="qty-foot">
-      ฿400 per ticket · 1 drink included · You'll get an email with a QR for your tickets soon
-      <span class="th">฿400 ต่อบัตร 1 ใบ · รวมเครื่องดื่ม 1 แก้ว · คุณจะได้รับอีเมลพร้อม QR สำหรับบัตรของคุณเร็ว ๆ นี้</span>
+      ฿500 per ticket · 1 drink included · You'll get an email with a QR for your tickets soon
+      <span class="th">฿500 ต่อบัตร 1 ใบ · รวมเครื่องดื่ม 1 แก้ว · คุณจะได้รับอีเมลพร้อม QR สำหรับบัตรของคุณเร็ว ๆ นี้</span>
     </p>
   </div>
 </div>
@@ -796,13 +806,13 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
      or Card (Stripe). Each pair's success URL points at
      its matching thank-you page, configured on the
      provider's side. */
-  var UNIT = 400;
+  var UNIT = 500;                        // single-ticket price, used to compute per-ticket savings
   var OPTIONS = [
-    { qty:1, stripe:'https://buy.stripe.com/28EfZa6AVakjden2JN77O11', hitpay:'https://hitpay.link/hcww6a' },
-    { qty:2, stripe:'https://buy.stripe.com/cNieV68J3eAz0rBgAD77O12', hitpay:'https://hitpay.link/okljry' },
-    { qty:3, stripe:'https://buy.stripe.com/4gM3co8J3eAz3DN3NR77O13', hitpay:'https://hitpay.link/nnv76d' },
-    { qty:4, stripe:'https://buy.stripe.com/7sYfZa9N7eAz6PZ3NR77O14', hitpay:'https://hitpay.link/ahgmaj' },
-    { qty:5, stripe:'https://buy.stripe.com/8x24gs3oJakj8Y7fwz77O15', hitpay:'https://hitpay.link/q55qmo' }
+    { qty:1, price:500,  stripe:'https://buy.stripe.com/fZu3cobVfbon3DNbgj77O1a', hitpay:'https://hitpay.link/iizast' },
+    { qty:2, price:900,  stripe:'https://buy.stripe.com/00w4gsf7rgIHcaj5VZ77O1b', hitpay:'https://hitpay.link/49zrlu' },
+    { qty:3, price:1300, stripe:'https://buy.stripe.com/7sYbIUgbv1NN2zJdor77O1c', hitpay:'https://hitpay.link/nn3jsv' },
+    { qty:4, price:1700, stripe:'https://buy.stripe.com/aFafZa5wR0JJ4HR1FJ77O1d', hitpay:'https://hitpay.link/wys6xo' },
+    { qty:5, price:2100, stripe:'https://buy.stripe.com/8x2dR26AVdwvb6f98b77O1e', hitpay:'https://hitpay.link/65rbwe' }
   ];
 
   var qtyOverlay  = document.getElementById('qty');
@@ -815,12 +825,14 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
 
   if (qtyList) {
     qtyList.innerHTML = OPTIONS.map(function(o){
-      var total = (o.qty * UNIT).toLocaleString('en-US');
+      var total = o.price.toLocaleString('en-US');
+      var savings = (UNIT * o.qty) - o.price;
+      var save = savings > 0 ? '<span class="save">Save ฿' + savings.toLocaleString('en-US') + '</span>' : '';
       return '<button class="qty-opt" type="button" data-qty="' + o.qty + '">' +
                '<span class="meta">' +
                  '<span class="n">' + o.qty + (o.qty === 1 ? ' Ticket' : ' Tickets') +
                    '<small>' + o.qty + ' บัตร</small></span>' +
-                 '<span class="p">฿' + total + '</span>' +
+                 '<span class="p"><span class="amt">฿' + total + '</span>' + save + '</span>' +
                '</span>' +
                '<span class="arw" aria-hidden="true">→</span>' +
              '</button>';
@@ -887,7 +899,7 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
   function openPay(o){
     selected = o;
     if (paySummary) {
-      paySummary.textContent = o.qty + (o.qty === 1 ? ' Ticket · ' : ' Tickets · ') + '฿' + (o.qty * UNIT).toLocaleString('en-US');
+      paySummary.textContent = o.qty + (o.qty === 1 ? ' Ticket · ' : ' Tickets · ') + '฿' + o.price.toLocaleString('en-US');
     }
     hide(qtyOverlay, false);
     show(payOverlay);
@@ -924,8 +936,8 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
       loadPixel();
       if (typeof fbq !== 'undefined') {
         fbq('track','AddPaymentInfo',{
-          content_name:'Early Bird Ticket Aug 22', payment_type:opt.dataset.method,
-          value:selected.qty * UNIT, currency:'THB', num_items:selected.qty
+          content_name:'Regular Ticket Aug 22', payment_type:opt.dataset.method,
+          value:selected.price, currency:'THB', num_items:selected.qty
         });
       }
       window.open(url, '_blank', 'noopener');
@@ -1099,7 +1111,7 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
     (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
     fbq('init','1700836710824786');
     fbq('track','PageView');
-    fbq('track','ViewContent',{content_name:'BEYOND Rooftop Latin Party Bad Bunny Amber Bar BKK Asok Aug 22',content_category:'Event Ticket',value:400,currency:'THB'});
+    fbq('track','ViewContent',{content_name:'BEYOND Rooftop Latin Party Bad Bunny Amber Bar BKK Asok Aug 22',content_category:'Event Ticket',value:UNIT,currency:'THB'});
   }
   ['pointerdown','keydown','scroll','touchstart'].forEach(function(ev){
     window.addEventListener(ev, loadPixel, { once:true, passive:true });
@@ -1117,16 +1129,17 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
 
     if (opt && opt.dataset.qty) {                // a quantity was chosen
       var q = Number(opt.dataset.qty) || 1;
+      var chosen = OPTIONS.filter(function(x){ return x.qty === q; })[0];
       fbq('track','InitiateCheckout',{
-        content_name:'Early Bird Ticket Aug 22',
+        content_name:'Regular Ticket Aug 22',
         content_type:'product',
-        value:q * UNIT, currency:'THB', num_items:q
+        value:chosen ? chosen.price : q * UNIT, currency:'THB', num_items:q
       });
       return;
     }
     if (opt && opt.dataset.method) return;       // payment method — tracked separately with the real qty
     if (a.dataset.track === 'ticket') {           // opened the picker
-      fbq('track','AddToCart',{content_name:'Early Bird Ticket Aug 22',value:UNIT,currency:'THB'});
+      fbq('track','AddToCart',{content_name:'Regular Ticket Aug 22',value:UNIT,currency:'THB'});
     }
   });
 })();
