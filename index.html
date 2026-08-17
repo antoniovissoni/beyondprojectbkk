@@ -313,6 +313,14 @@ section{padding-block:5rem}
 .qty-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.25rem}
 .qty-head h3{font-size:1.25rem;font-weight:700;letter-spacing:-.02em}
 .qty-head .th{margin-top:.3rem}
+.qty-head-left{display:flex;align-items:flex-start;gap:.75rem;min-width:0}
+.qty-back{
+  flex:none;width:2.25rem;height:2.25rem;border-radius:.5rem;border:1px solid var(--line);
+  background:transparent;color:var(--ink-2);display:flex;align-items:center;justify-content:center;
+  transition:border-color .15s ease,color .15s ease;
+}
+.qty-back:hover{border-color:var(--ink-3);color:var(--ink)}
+.qty-back svg{width:1rem;height:1rem}
 .qty-close{
   flex:none;width:2.25rem;height:2.25rem;border-radius:.5rem;border:1px solid var(--line);
   background:transparent;color:var(--ink-2);display:flex;align-items:center;justify-content:center;
@@ -323,7 +331,7 @@ section{padding-block:5rem}
 
 .qty-list{display:flex;flex-direction:column;gap:.625rem}
 .qty-opt{
-  display:flex;align-items:center;gap:1rem;
+  width:100%;display:flex;align-items:center;gap:1rem;text-align:left;
   background:var(--card);border:1px solid var(--line);border-radius:.875rem;
   padding:1.05rem 1.25rem;transition:border-color .15s ease,background-color .15s ease;
 }
@@ -334,8 +342,11 @@ section{padding-block:5rem}
 .qty-opt .p{display:block;font-size:.9375rem;font-weight:600;color:var(--acc);margin-top:.3rem}
 .qty-opt .arw{flex:none;color:var(--ink-3);font-size:1.125rem;transition:transform .15s ease,color .15s ease}
 .qty-opt:hover .arw{color:var(--acc);transform:translateX(3px)}
+.qty-opt .ico{width:1.5rem;height:1.5rem;flex:none;color:var(--ink-3);transition:color .15s ease}
+.qty-opt:hover .ico{color:var(--acc)}
 
 .qty-foot{margin-top:1.25rem;text-align:center;font-size:.75rem;color:var(--ink-3);line-height:1.6}
+.pay-summary{text-align:center;font-size:.8125rem;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.04em;margin:-.5rem 0 1.25rem}
 
 @media (min-width:640px){
   .qty-overlay{align-items:center}
@@ -431,7 +442,7 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
 <!-- ─── SCARCITY BAR ───────────────────────────────── -->
 <a class="stock" href="#tickets">
   <span class="stock-info">
-    <b>Only 5 tickets left!</b>
+    <b>Only 3 tickets left!</b>
     <span class="sub">At this price</span>
   </span>
   <span class="stock-cd" aria-label="Time until price increase">
@@ -731,6 +742,39 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
   </div>
 </div>
 
+<!-- ─── PAYMENT METHOD PICKER ──────────────────────── -->
+<div class="qty-overlay" id="pay" role="dialog" aria-modal="true" aria-labelledby="pay-title" hidden>
+  <div class="qty-sheet">
+    <div class="qty-head">
+      <div class="qty-head-left">
+        <button class="qty-back" type="button" aria-label="Back · ย้อนกลับ">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 6l-6 6 6 6"/>
+          </svg>
+        </button>
+        <div>
+          <h3 id="pay-title">How would you like to pay?</h3>
+          <span class="th">เลือกวิธีชำระเงิน</span>
+        </div>
+      </div>
+      <button class="qty-close" type="button" aria-label="Close · ปิด">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+    </div>
+
+    <p class="pay-summary" id="pay-summary"></p>
+
+    <div class="qty-list" id="pay-list"><!-- built by JS --></div>
+
+    <p class="qty-foot">
+      Instant confirmation by email
+      <span class="th">ยืนยันทันทีทางอีเมล</span>
+    </p>
+  </div>
+</div>
+
 <noscript><img height="1" width="1" style="display:none" alt=""
   src="https://www.facebook.com/tr?id=1700836710824786&ev=PageView&noscript=1"></noscript>
 
@@ -738,40 +782,76 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
 (function(){
   'use strict';
 
-  /* ── Ticket quantity picker ─────────────────────
-     One Stripe payment link per quantity. Each link's
-     success URL points at its matching thank-you page. */
+  /* ── Ticket quantity + payment method picker ────
+     Step 1: pick a quantity (1-5 tickets).
+     Step 2: pick a payment method — PromptPay (HitPay)
+     or Card (Stripe). Each pair's success URL points at
+     its matching thank-you page, configured on the
+     provider's side. */
   var UNIT = 400;
   var OPTIONS = [
-    { qty:1, url:'https://buy.stripe.com/28EfZa6AVakjden2JN77O11' },
-    { qty:2, url:'https://buy.stripe.com/cNieV68J3eAz0rBgAD77O12' },
-    { qty:3, url:'https://buy.stripe.com/4gM3co8J3eAz3DN3NR77O13' },
-    { qty:4, url:'https://buy.stripe.com/7sYfZa9N7eAz6PZ3NR77O14' },
-    { qty:5, url:'https://buy.stripe.com/8x24gs3oJakj8Y7fwz77O15' }
+    { qty:1, stripe:'https://buy.stripe.com/28EfZa6AVakjden2JN77O11', hitpay:'https://hitpay.link/hcww6a' },
+    { qty:2, stripe:'https://buy.stripe.com/cNieV68J3eAz0rBgAD77O12', hitpay:'https://hitpay.link/okljry' },
+    { qty:3, stripe:'https://buy.stripe.com/4gM3co8J3eAz3DN3NR77O13', hitpay:'https://hitpay.link/nnv76d' },
+    { qty:4, stripe:'https://buy.stripe.com/7sYfZa9N7eAz6PZ3NR77O14', hitpay:'https://hitpay.link/ahgmaj' },
+    { qty:5, stripe:'https://buy.stripe.com/8x24gs3oJakj8Y7fwz77O15', hitpay:'https://hitpay.link/q55qmo' }
   ];
 
-  var overlay = document.getElementById('qty');
-  var list    = document.getElementById('qty-list');
-  var lastFocus = null;
+  var qtyOverlay  = document.getElementById('qty');
+  var payOverlay  = document.getElementById('pay');
+  var qtyList     = document.getElementById('qty-list');
+  var payList     = document.getElementById('pay-list');
+  var paySummary  = document.getElementById('pay-summary');
+  var lastFocus   = null;
+  var selected    = null;
 
-  if (list) {
-    list.innerHTML = OPTIONS.map(function(o){
+  if (qtyList) {
+    qtyList.innerHTML = OPTIONS.map(function(o){
       var total = (o.qty * UNIT).toLocaleString('en-US');
-      return '<a class="qty-opt" href="' + o.url + '" target="_blank" rel="noopener" ' +
-             'data-qty="' + o.qty + '">' +
+      return '<button class="qty-opt" type="button" data-qty="' + o.qty + '">' +
                '<span class="meta">' +
                  '<span class="n">' + o.qty + (o.qty === 1 ? ' Ticket' : ' Tickets') +
                    '<small>' + o.qty + ' บัตร</small></span>' +
                  '<span class="p">฿' + total + '</span>' +
                '</span>' +
                '<span class="arw" aria-hidden="true">→</span>' +
-             '</a>';
+             '</button>';
     }).join('');
   }
 
-  function openQty(){
+  if (payList) {
+    payList.innerHTML =
+      '<button class="qty-opt" type="button" data-method="promptpay">' +
+        '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+          '<rect x="3" y="3" width="7" height="7" rx="1.2"/>' +
+          '<rect x="14" y="3" width="7" height="7" rx="1.2"/>' +
+          '<rect x="3" y="14" width="7" height="7" rx="1.2"/>' +
+          '<rect x="14.5" y="14.5" width="2.5" height="2.5"/>' +
+          '<rect x="18.5" y="14.5" width="2.5" height="2.5"/>' +
+          '<rect x="14.5" y="18.5" width="2.5" height="2.5"/>' +
+          '<rect x="18.5" y="18.5" width="2.5" height="2.5"/>' +
+        '</svg>' +
+        '<span class="meta">' +
+          '<span class="n">PromptPay<small>พร้อมเพย์</small></span>' +
+          '<span class="p">Pay by QR code</span>' +
+        '</span>' +
+        '<span class="arw" aria-hidden="true">→</span>' +
+      '</button>' +
+      '<button class="qty-opt" type="button" data-method="card">' +
+        '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+          '<rect x="2.5" y="5.5" width="19" height="13" rx="2.2"/>' +
+          '<path d="M2.5 10h19"/>' +
+        '</svg>' +
+        '<span class="meta">' +
+          '<span class="n">Credit / Debit Card<small>บัตรเครดิต/เดบิต</small></span>' +
+          '<span class="p">Apple Pay, Visa, Mastercard, Amex</span>' +
+        '</span>' +
+        '<span class="arw" aria-hidden="true">→</span>' +
+      '</button>';
+  }
+
+  function show(overlay){
     if (!overlay) return;
-    lastFocus = document.activeElement;
     overlay.hidden = false;
     void overlay.offsetWidth;              // let the transition run from the hidden state
     overlay.classList.add('open');
@@ -779,15 +859,40 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
     var first = overlay.querySelector('.qty-opt');
     if (first) first.focus();
   }
-  function closeQty(){
+  function hide(overlay, restoreFocus){
     if (!overlay) return;
     overlay.classList.remove('open');
-    document.body.style.overflow = '';
     setTimeout(function(){ overlay.hidden = true; }, 220);
-    if (lastFocus) lastFocus.focus();
+    if (restoreFocus) {
+      document.body.style.overflow = '';
+      if (lastFocus) lastFocus.focus();
+    }
   }
 
-  /* every ticket CTA opens the picker instead of jumping straight to Stripe */
+  function openQty(){
+    lastFocus = document.activeElement;
+    show(qtyOverlay);
+  }
+  function closeQty(){
+    hide(qtyOverlay, true);
+  }
+  function openPay(o){
+    selected = o;
+    if (paySummary) {
+      paySummary.textContent = o.qty + (o.qty === 1 ? ' Ticket · ' : ' Tickets · ') + '฿' + (o.qty * UNIT).toLocaleString('en-US');
+    }
+    hide(qtyOverlay, false);
+    show(payOverlay);
+  }
+  function closePay(){
+    hide(payOverlay, true);
+  }
+  function backToQty(){
+    hide(payOverlay, false);
+    show(qtyOverlay);
+  }
+
+  /* every ticket CTA opens the picker instead of jumping straight to checkout */
   document.querySelectorAll('[data-track="ticket"], .hero .btn, .hero-cta').forEach(function(el){
     el.addEventListener('click', function(e){
       e.preventDefault();
@@ -795,15 +900,49 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
     });
   });
 
-  if (overlay) {
-    overlay.addEventListener('click', function(e){
-      if (e.target === overlay) closeQty();          // tap the backdrop
-    });
-    overlay.querySelector('.qty-close').addEventListener('click', closeQty);
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape' && overlay.classList.contains('open')) closeQty();
+  if (qtyList) {
+    qtyList.addEventListener('click', function(e){
+      var opt = e.target.closest('.qty-opt');
+      if (!opt) return;
+      var o = OPTIONS.filter(function(x){ return x.qty === Number(opt.dataset.qty); })[0];
+      if (o) openPay(o);
     });
   }
+  if (payList) {
+    payList.addEventListener('click', function(e){
+      var opt = e.target.closest('.qty-opt');
+      if (!opt || !selected) return;
+      var url = opt.dataset.method === 'promptpay' ? selected.hitpay : selected.stripe;
+      loadPixel();
+      if (typeof fbq !== 'undefined') {
+        fbq('track','AddPaymentInfo',{
+          content_name:'Early Bird Ticket Aug 22', payment_type:opt.dataset.method,
+          value:selected.qty * UNIT, currency:'THB', num_items:selected.qty
+        });
+      }
+      window.open(url, '_blank', 'noopener');
+      closePay();
+    });
+  }
+
+  if (qtyOverlay) {
+    qtyOverlay.addEventListener('click', function(e){
+      if (e.target === qtyOverlay) closeQty();       // tap the backdrop
+    });
+    qtyOverlay.querySelector('.qty-close').addEventListener('click', closeQty);
+  }
+  if (payOverlay) {
+    payOverlay.addEventListener('click', function(e){
+      if (e.target === payOverlay) closePay();        // tap the backdrop
+    });
+    payOverlay.querySelector('.qty-close').addEventListener('click', closePay);
+    payOverlay.querySelector('.qty-back').addEventListener('click', backToQty);
+  }
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    if (payOverlay && payOverlay.classList.contains('open')) closePay();
+    else if (qtyOverlay && qtyOverlay.classList.contains('open')) closeQty();
+  });
 
   /* ── Countdown: time left until the next daily
         1AM Bangkok price increase ──────────────── */
@@ -968,7 +1107,7 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
     loadPixel();
     if (typeof fbq === 'undefined') return;
 
-    if (opt) {                                   // a quantity was chosen — real checkout intent
+    if (opt && opt.dataset.qty) {                // a quantity was chosen
       var q = Number(opt.dataset.qty) || 1;
       fbq('track','InitiateCheckout',{
         content_name:'Early Bird Ticket Aug 22',
@@ -977,6 +1116,7 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
       });
       return;
     }
+    if (opt && opt.dataset.method) return;       // payment method — tracked separately with the real qty
     if (a.dataset.track === 'ticket') {           // opened the picker
       fbq('track','AddToCart',{content_name:'Early Bird Ticket Aug 22',value:UNIT,currency:'THB'});
     }
