@@ -314,6 +314,14 @@ section{padding-block:5rem}
 .qty-head h3{font-size:1.25rem;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
 .qty-head .th{margin-top:.3rem}
 .qty-head-left{display:flex;align-items:flex-start;gap:.75rem;min-width:0}
+
+/* Reset native <button> UA styling (font, color, appearance) so these
+   don't pick up a platform accent color instead of the design's own. */
+.qty-back,.qty-close,.qty-opt{
+  font:inherit;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent;
+  cursor:pointer;color:var(--ink);
+}
+
 .qty-back{
   flex:none;width:2.25rem;height:2.25rem;border-radius:.5rem;border:1px solid var(--line);
   background:transparent;color:var(--ink-2);display:flex;align-items:center;justify-content:center;
@@ -337,7 +345,7 @@ section{padding-block:5rem}
 }
 .qty-opt:hover{border-color:var(--acc);background:#241b18}
 .qty-opt .meta{flex:1;min-width:0;display:flex;flex-direction:column}
-.qty-opt .n{display:block;font-size:1.0625rem;font-weight:800;letter-spacing:-.01em;text-transform:uppercase}
+.qty-opt .n{display:block;font-size:1.0625rem;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:var(--ink)}
 .qty-opt .n small{font-size:.8125rem;font-weight:500;color:var(--ink-3);text-transform:none;margin-left:.45rem}
 .qty-opt .p{display:block;font-size:.9375rem;font-weight:600;color:var(--acc);margin-top:.3rem}
 .qty-opt .arw{flex:none;color:var(--ink-3);font-size:1.125rem;transition:transform .15s ease,color .15s ease}
