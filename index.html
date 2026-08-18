@@ -356,6 +356,9 @@ section{padding-block:5rem}
 .qty-opt:hover .ico{color:var(--acc)}
 
 .qty-foot{margin-top:1.25rem;text-align:center;font-size:.75rem;color:var(--ink-3);line-height:1.6}
+.qty-foot .legal-note{display:block;margin-top:.5rem;font-size:.6875rem;color:var(--ink-3)}
+.qty-foot .legal-note a{color:var(--ink-2);text-decoration:underline;text-underline-offset:.15em}
+.qty-foot .legal-note a:hover{color:var(--ink)}
 .pay-summary{text-align:center;font-size:.8125rem;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.04em;margin:-.5rem 0 1.25rem}
 
 @media (min-width:640px){
@@ -437,6 +440,9 @@ html.js .rv.in{opacity:1;transform:none;transition:opacity .55s ease,transform .
 footer{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:3rem var(--gut) 7rem}
 footer img{width:7rem;opacity:.45}
 footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);text-align:center}
+footer .legal-links{margin-top:-.4rem}
+footer .legal-links a{color:var(--ink-3);text-decoration:underline;text-underline-offset:.15em}
+footer .legal-links a:hover{color:var(--ink-2)}
 
 @media (min-width:640px){
   :root{--gut:2rem}
@@ -729,6 +735,7 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
 <footer>
   <img src="assets/logo-wide.webp" alt="BEYOND" width="1600" height="336" loading="lazy" decoding="async">
   <p>© 2026 BEYOND Project · Bangkok</p>
+  <p class="legal-links"><a href="/privacy-policy.html">Privacy Policy</a> · <a href="/terms.html">Terms &amp; Conditions</a></p>
 </footer>
 
 <div class="sticky" id="sticky">
@@ -789,6 +796,9 @@ footer p{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:v
     <p class="qty-foot">
       You'll get an email with a QR for your tickets soon
       <span class="th">คุณจะได้รับอีเมลพร้อม QR สำหรับบัตรของคุณเร็ว ๆ นี้</span>
+      <span class="legal-note">Tickets are non-refundable. By continuing you agree to our
+        <a href="/terms.html" target="_blank" rel="noopener">Terms</a> &amp;
+        <a href="/privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
     </p>
   </div>
 </div>
