@@ -75,6 +75,16 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 .stock-info{text-align:left;line-height:1.2;min-width:0}
 .stock-info b{display:block;font-size:clamp(.8125rem,3.6vw,.9375rem);font-weight:800;letter-spacing:-.01em;white-space:nowrap}
 .stock-info .sub{display:block;font-size:.625rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-top:.15rem;white-space:nowrap}
+.stock-cd{display:flex;gap:.35rem;flex:none}
+.stock-cd .cell{
+  background:#1a1210;border-radius:.5rem;min-width:2.375rem;
+  padding:.3rem .15rem .25rem;text-align:center;
+}
+.stock-cd .cell b{
+  display:block;font-size:clamp(.9375rem,3.8vw,1.125rem);font-weight:800;line-height:1;
+  font-variant-numeric:tabular-nums;color:#fff;
+}
+.stock-cd .cell span{display:block;font-size:.5rem;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:.15rem}
 
 /* ─── HERO ─────────────────────────────────────── */
 .hero{
@@ -448,8 +458,13 @@ footer .legal-links a:hover{color:var(--ink-2)}
 <!-- ─── SCARCITY BAR ───────────────────────────────── -->
 <a class="stock" href="#tickets">
   <span class="stock-info">
-    <b>Only 9 tickets left!</b>
-    <span class="sub">Final release</span>
+    <b id="stock-main">Only 9 tickets left!</b>
+    <span class="sub" id="stock-sub">Doors open in</span>
+  </span>
+  <span class="stock-cd" id="stock-cd" aria-label="Time until the event starts">
+    <span class="cell"><b data-cd="h">00</b><span>Hrs</span></span>
+    <span class="cell"><b data-cd="m">00</b><span>Mins</span></span>
+    <span class="cell"><b data-cd="s">00</b><span>Secs</span></span>
   </span>
 </a>
 
@@ -958,6 +973,34 @@ footer .legal-links a:hover{color:var(--ink-2)}
     if (payOverlay && payOverlay.classList.contains('open')) closePay();
     else if (qtyOverlay && qtyOverlay.classList.contains('open')) closeQty();
   });
+
+  /* ── Countdown: time left until the event starts —
+        once it hits zero, flip the bar to "live" ─── */
+  var cdEls = document.querySelectorAll('[data-cd]');
+  if (cdEls.length) {
+    var f = { h: [], m: [], s: [] };
+    cdEls.forEach(function(el){ f[el.dataset.cd].push(el); });
+    var pad = function(v){ return v < 10 ? '0' + v : '' + v; };
+    var EVENT_START = new Date('2026-08-22T21:00:00+07:00').getTime();
+    var stockMain = document.getElementById('stock-main');
+    var stockSub  = document.getElementById('stock-sub');
+    var stockCd   = document.getElementById('stock-cd');
+    var setAll = function(list, val){ list.forEach(function(el){ el.textContent = val; }); };
+    var goLive = function(){
+      if (stockMain) stockMain.textContent = 'LIVE RIGHT NOW';
+      if (stockSub)  stockSub.textContent  = 'FEW TICKETS LEFT';
+      if (stockCd)   stockCd.style.display = 'none';
+    };
+    var tick = function(){
+      var left = EVENT_START - Date.now();
+      if (left <= 0) { goLive(); clearInterval(cdTimer); return; }
+      setAll(f.h, pad(Math.floor(left / 36e5)));
+      setAll(f.m, pad(Math.floor(left % 36e5 / 6e4)));
+      setAll(f.s, pad(Math.floor(left % 6e4 / 1e3)));
+    };
+    tick();
+    var cdTimer = setInterval(tick, 1000);
+  }
 
   /* ── Gallery: two rows, built in JS so the photos
         stay out of the HTML payload ─────────────── */
