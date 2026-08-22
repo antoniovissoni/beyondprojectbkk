@@ -75,16 +75,6 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 .stock-info{text-align:left;line-height:1.2;min-width:0}
 .stock-info b{display:block;font-size:clamp(.8125rem,3.6vw,.9375rem);font-weight:800;letter-spacing:-.01em;white-space:nowrap}
 .stock-info .sub{display:block;font-size:.625rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-top:.15rem;white-space:nowrap}
-.stock-cd{display:flex;gap:.35rem;flex:none}
-.stock-cd .cell{
-  background:#1a1210;border-radius:.5rem;min-width:2.375rem;
-  padding:.3rem .15rem .25rem;text-align:center;
-}
-.stock-cd .cell b{
-  display:block;font-size:clamp(.9375rem,3.8vw,1.125rem);font-weight:800;line-height:1;
-  font-variant-numeric:tabular-nums;color:#fff;
-}
-.stock-cd .cell span{display:block;font-size:.5rem;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:.15rem}
 
 /* ─── HERO ─────────────────────────────────────── */
 .hero{
@@ -459,12 +449,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
 <a class="stock" href="#tickets">
   <span class="stock-info">
     <b>Only 9 tickets left!</b>
-    <span class="sub">At this price</span>
-  </span>
-  <span class="stock-cd" aria-label="Time until price increase">
-    <span class="cell"><b data-cd="h">00</b><span>Hrs</span></span>
-    <span class="cell"><b data-cd="m">00</b><span>Mins</span></span>
-    <span class="cell"><b data-cd="s">00</b><span>Secs</span></span>
+    <span class="sub">Final release</span>
   </span>
 </a>
 
@@ -590,7 +575,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
       Get your tickets
       <span class="th">ซื้อบัตรของคุณ</span>
     </h2>
-    <p class="lede">Early bird sold out. Tickets now ฿500 — prices increase soon.</p>
+    <p class="lede">Early bird and regular sold out. Tickets now ฿600 — final release.</p>
 
     <div class="tiers">
 
@@ -608,9 +593,8 @@ footer .legal-links a:hover{color:var(--ink-2)}
         <span class="tag">Sold out</span>
       </div>
 
-      <!-- Regular — LIVE -->
-      <a class="tier live" href="https://buy.stripe.com/fZu3cobVfbon3DNbgj77O1a"
-         data-track="ticket" target="_blank" rel="noopener">
+      <!-- Regular — SOLD OUT -->
+      <div class="tier sold" aria-disabled="true">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9.5V7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2.5a2.5 2.5 0 0 0 0 5V17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.5a2.5 2.5 0 0 0 0-5Z"/>
           <path d="M14 6v12" stroke-dasharray="2 2.5"/>
@@ -618,13 +602,14 @@ footer .legal-links a:hover{color:var(--ink-2)}
         <div class="meta">
           <p class="name">Regular ticket</p>
           <p class="price">฿500</p>
-          <span class="th">บัตรราคาปกติ · รวมเครื่องดื่ม 1 แก้ว · เปิดขายแล้ว</span>
+          <span class="th">บัตรราคาปกติ · ขายหมดแล้ว</span>
         </div>
-        <span class="tag">Buy now</span>
-      </a>
+        <span class="tag">Sold out</span>
+      </div>
 
-      <!-- Final release — not open yet -->
-      <div class="tier soon" aria-disabled="true">
+      <!-- Final release — LIVE -->
+      <a class="tier live" href="https://buy.stripe.com/6oU3coaRb8cb4HRckn77O0d"
+         data-track="ticket" target="_blank" rel="noopener">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="8.5"/>
           <path d="M12 7.5V12l3 2"/>
@@ -632,10 +617,10 @@ footer .legal-links a:hover{color:var(--ink-2)}
         <div class="meta">
           <p class="name">Final release</p>
           <p class="price">฿600</p>
-          <span class="th">รอบสุดท้าย</span>
+          <span class="th">รอบสุดท้าย · รวมเครื่องดื่ม 1 แก้ว · เปิดขายแล้ว</span>
         </div>
-        <span class="tag">Not open</span>
-      </div>
+        <span class="tag">Buy now</span>
+      </a>
     </div>
 
     <a class="vip" href="https://luma.com/j7zd0cl5" target="_blank" rel="noopener">
@@ -660,7 +645,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
       </li>
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
-        <span><b>This price, locked</b> — the next release is ฿600, and prices only go up</span>
+        <span><b>Final release</b> — this is the last ticket tier, get it before it's gone</span>
       </li>
     </ul>
 
@@ -739,7 +724,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
 </footer>
 
 <div class="sticky" id="sticky">
-  <a class="s-ticket" href="https://buy.stripe.com/fZu3cobVfbon3DNbgj77O1a" data-track="ticket" target="_blank" rel="noopener">Get ticket · ฿500</a>
+  <a class="s-ticket" href="https://buy.stripe.com/6oU3coaRb8cb4HRckn77O0d" data-track="ticket" target="_blank" rel="noopener">Get ticket · ฿600</a>
   <a class="s-vip" href="https://luma.com/j7zd0cl5" target="_blank" rel="noopener">VIP</a>
 </div>
 
@@ -761,8 +746,8 @@ footer .legal-links a:hover{color:var(--ink-2)}
     <div class="qty-list" id="qty-list"><!-- built by JS --></div>
 
     <p class="qty-foot">
-      ฿500 per ticket · 1 drink included · You'll get an email with a QR for your tickets soon
-      <span class="th">฿500 ต่อบัตร 1 ใบ · รวมเครื่องดื่ม 1 แก้ว · คุณจะได้รับอีเมลพร้อม QR สำหรับบัตรของคุณเร็ว ๆ นี้</span>
+      ฿600 per ticket · 1 drink included · You'll get an email with a QR for your tickets soon
+      <span class="th">฿600 ต่อบัตร 1 ใบ · รวมเครื่องดื่ม 1 แก้ว · คุณจะได้รับอีเมลพร้อม QR สำหรับบัตรของคุณเร็ว ๆ นี้</span>
     </p>
   </div>
 </div>
@@ -816,13 +801,13 @@ footer .legal-links a:hover{color:var(--ink-2)}
      or Card (Stripe). Each pair's success URL points at
      its matching thank-you page, configured on the
      provider's side. */
-  var UNIT = 500;                        // single-ticket price, used to compute per-ticket savings
+  var UNIT = 600;                        // single-ticket price — flat, no group discount
   var OPTIONS = [
-    { qty:1, price:500,  stripe:'https://buy.stripe.com/fZu3cobVfbon3DNbgj77O1a', hitpay:'https://hitpay.link/iizast' },
-    { qty:2, price:900,  stripe:'https://buy.stripe.com/00w4gsf7rgIHcaj5VZ77O1b', hitpay:'https://hitpay.link/49zrlu' },
-    { qty:3, price:1300, stripe:'https://buy.stripe.com/7sYbIUgbv1NN2zJdor77O1c', hitpay:'https://hitpay.link/nn3jsv' },
-    { qty:4, price:1700, stripe:'https://buy.stripe.com/aFafZa5wR0JJ4HR1FJ77O1d', hitpay:'https://hitpay.link/wys6xo' },
-    { qty:5, price:2100, stripe:'https://buy.stripe.com/8x2dR26AVdwvb6f98b77O1e', hitpay:'https://hitpay.link/65rbwe' }
+    { qty:1, price:600,  stripe:'https://buy.stripe.com/6oU3coaRb8cb4HRckn77O0d', hitpay:'https://hitpay.link/zz1gst' },
+    { qty:2, price:1200, stripe:'https://buy.stripe.com/aFa00ccZj9gfden0BF77O0f', hitpay:'https://hitpay.link/zm7u5p' },
+    { qty:3, price:1800, stripe:'https://buy.stripe.com/3cIaEQ5wR8cb5LVckn77O0g', hitpay:'https://hitpay.link/skykwp' },
+    { qty:4, price:2400, stripe:'https://buy.stripe.com/aFacMY4sN787b6f4RV77O0h', hitpay:'https://hitpay.link/uggpaf' },
+    { qty:5, price:3000, stripe:'https://buy.stripe.com/eVq7sE1gBdwvgqzdor77O0i', hitpay:'https://hitpay.link/mmeeyv' }
   ];
 
   var qtyOverlay  = document.getElementById('qty');
@@ -946,7 +931,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
       loadPixel();
       if (typeof fbq !== 'undefined') {
         fbq('track','AddPaymentInfo',{
-          content_name:'Regular Ticket Aug 22', payment_type:opt.dataset.method,
+          content_name:'Final Release Ticket Aug 22', payment_type:opt.dataset.method,
           value:selected.price, currency:'THB', num_items:selected.qty
         });
       }
@@ -973,32 +958,6 @@ footer .legal-links a:hover{color:var(--ink-2)}
     if (payOverlay && payOverlay.classList.contains('open')) closePay();
     else if (qtyOverlay && qtyOverlay.classList.contains('open')) closeQty();
   });
-
-  /* ── Countdown: time left until the next daily
-        1AM Bangkok price increase ──────────────── */
-  var cdEls = document.querySelectorAll('[data-cd]');
-  if (cdEls.length) {
-    var f = { h: [], m: [], s: [] };
-    cdEls.forEach(function(el){ f[el.dataset.cd].push(el); });
-    var pad = function(v){ return v < 10 ? '0' + v : '' + v; };
-    var BANGKOK_OFFSET_MS = 7 * 3600000;
-    var nextOneAM = function(){
-      var now = Date.now();
-      var bangkokNow = now + BANGKOK_OFFSET_MS;
-      var d = new Date(bangkokNow);
-      var target = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 1, 0, 0) - BANGKOK_OFFSET_MS;
-      if (target <= now) target += 864e5;
-      return target;
-    };
-    var setAll = function(list, val){ list.forEach(function(el){ el.textContent = val; }); };
-    var tick = function(){
-      var left = nextOneAM() - Date.now();
-      setAll(f.h, pad(Math.floor(left / 36e5)));
-      setAll(f.m, pad(Math.floor(left % 36e5 / 6e4)));
-      setAll(f.s, pad(Math.floor(left % 6e4 / 1e3)));
-    };
-    tick(); setInterval(tick, 1000);
-  }
 
   /* ── Gallery: two rows, built in JS so the photos
         stay out of the HTML payload ─────────────── */
@@ -1141,7 +1100,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
       var q = Number(opt.dataset.qty) || 1;
       var chosen = OPTIONS.filter(function(x){ return x.qty === q; })[0];
       fbq('track','InitiateCheckout',{
-        content_name:'Regular Ticket Aug 22',
+        content_name:'Final Release Ticket Aug 22',
         content_type:'product',
         value:chosen ? chosen.price : q * UNIT, currency:'THB', num_items:q
       });
@@ -1149,7 +1108,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
     }
     if (opt && opt.dataset.method) return;       // payment method — tracked separately with the real qty
     if (a.dataset.track === 'ticket') {           // opened the picker
-      fbq('track','AddToCart',{content_name:'Regular Ticket Aug 22',value:UNIT,currency:'THB'});
+      fbq('track','AddToCart',{content_name:'Final Release Ticket Aug 22',value:UNIT,currency:'THB'});
     }
   });
 })();
