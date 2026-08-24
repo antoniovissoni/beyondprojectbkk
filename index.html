@@ -351,9 +351,13 @@ section{padding-block:5rem}
 .qty-opt .meta{flex:1;min-width:0;display:flex;flex-direction:column}
 .qty-opt .n{display:block;font-size:1.0625rem;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:var(--ink)}
 .qty-opt .n small{font-size:.8125rem;font-weight:500;color:var(--ink-3);text-transform:none;margin-left:.45rem}
-.qty-opt .p{display:flex;align-items:baseline;gap:.55rem;margin-top:.3rem}
-.qty-opt .p .amt{font-size:.9375rem;font-weight:600;color:var(--acc)}
-.qty-opt .save{font-size:.75rem;font-weight:600;color:#7dd88a}
+.qty-opt .p{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin-top:.3rem}
+.qty-opt .p .orig{font-size:.8125rem;font-weight:600;color:var(--ink-3);text-decoration:line-through;text-decoration-thickness:1.5px}
+.qty-opt .p .amt{font-size:1rem;font-weight:700;color:var(--ink)}
+.qty-opt .save{
+  font-size:.6875rem;font-weight:800;letter-spacing:.02em;color:#0a3d2e;
+  background:#7dd88a;border-radius:999px;padding:.2rem .55rem;white-space:nowrap;
+}
 .qty-opt .arw{flex:none;color:var(--ink-3);font-size:1.125rem;transition:transform .15s ease,color .15s ease}
 .qty-opt:hover .arw{color:var(--acc);transform:translateX(3px)}
 .qty-opt .ico{width:1.5rem;height:1.5rem;flex:none;color:var(--ink-3);transition:color .15s ease}
@@ -892,13 +896,18 @@ footer .legal-links a:hover{color:var(--ink-2)}
     var html = '';
     for (var qty = 1; qty <= MAX_QTY; qty++) {
       var discount = bundleDiscount(qty);
-      var total = qty * UNIT - discount;
-      var save = discount > 0 ? '<span class="save">Save ฿' + fmt(discount) + '</span>' : '';
+      var original = qty * UNIT;
+      var total = original - discount;
+      var priceHtml = discount > 0
+        ? '<span class="orig">฿' + fmt(original) + '</span>' +
+          '<span class="amt">฿' + fmt(total) + '</span>' +
+          '<span class="save">Save ฿' + fmt(discount) + '</span>'
+        : '<span class="amt">฿' + fmt(total) + '</span>';
       html += '<button class="qty-opt" type="button" data-qty="' + qty + '">' +
                '<span class="meta">' +
                  '<span class="n">' + qty + (qty === 1 ? ' Ticket' : ' Tickets') +
                    '<small>' + qty + ' บัตร</small></span>' +
-                 '<span class="p"><span class="amt">฿' + fmt(total) + '</span>' + save + '</span>' +
+                 '<span class="p">' + priceHtml + '</span>' +
                '</span>' +
                '<span class="arw" aria-hidden="true">→</span>' +
              '</button>';
