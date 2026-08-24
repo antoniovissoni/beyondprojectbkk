@@ -899,8 +899,8 @@ footer .legal-links a:hover{color:var(--ink-2)}
       var original = qty * UNIT;
       var total = original - discount;
       var priceHtml = discount > 0
-        ? '<span class="orig">฿' + fmt(original) + '</span>' +
-          '<span class="amt">฿' + fmt(total) + '</span>' +
+        ? '<span class="amt">฿' + fmt(total) + '</span>' +
+          '<span class="orig">฿' + fmt(original) + '</span>' +
           '<span class="save">Save ฿' + fmt(discount) + '</span>'
         : '<span class="amt">฿' + fmt(total) + '</span>';
       html += '<button class="qty-opt" type="button" data-qty="' + qty + '">' +
