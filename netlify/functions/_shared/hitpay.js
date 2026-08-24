@@ -38,7 +38,11 @@ async function hitpayGet(path) {
 
 // Creates a HitPay Payment Request for the live Stripe tier's current price
 // (amount is computed by the caller from Stripe, never a stored/static value)
-// and returns the hosted checkout url to redirect the buyer to.
+// and returns the hosted checkout url to redirect the buyer to. Method code
+// is opn_prompt_pay (confirmed against this account's own HitPay dashboard,
+// not the generic "promptpay" name used in HitPay's marketing copy) — this
+// account is provisioned for cross-border PromptPay acceptance, which is an
+// account-level setting on HitPay's side, not a different method code.
 async function createPaymentRequest({ amount, currency, email, name, referenceNumber, redirectUrl }) {
   return hitpayPost('/v1/payment-requests', {
     amount: amount.toFixed(2),
@@ -47,7 +51,7 @@ async function createPaymentRequest({ amount, currency, email, name, referenceNu
     name,
     reference_number: referenceNumber,
     redirect_url: redirectUrl,
-    'payment_methods[]': 'promptpay'
+    'payment_methods[]': 'opn_prompt_pay'
   });
 }
 
