@@ -67,8 +67,8 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 .stock{
   position:fixed;top:0;left:0;right:0;z-index:70;min-height:var(--bar);
   display:flex;align-items:center;justify-content:center;gap:1.25rem;
-  background:linear-gradient(120deg,#ff1f2d 0%,#ff6a4d 100%);color:#fff;padding:.5rem 1rem;
-  box-shadow:0 4px 24px rgba(255,45,45,.45);
+  background:linear-gradient(120deg,#1547d6 0%,#3b82f6 100%);color:#fff;padding:.5rem 1rem;
+  box-shadow:0 4px 24px rgba(21,71,214,.45);
   transform:translateY(0);transition:transform .3s ease;
 }
 .stock.hide{transform:translateY(-100%)}
@@ -463,10 +463,9 @@ footer .legal-links a:hover{color:var(--ink-2)}
 <!-- ─── SCARCITY BAR ───────────────────────────────── -->
 <a class="stock" href="#tickets">
   <span class="stock-info">
-    <b id="stock-main">Only 9 tickets left!</b>
-    <span class="sub" id="stock-sub">Doors open in</span>
+    <b id="stock-main">10 tickets left at this price</b>
   </span>
-  <span class="stock-cd" id="stock-cd" aria-label="Time until the event starts">
+  <span class="stock-cd" id="stock-cd" aria-label="Countdown">
     <span class="cell"><b data-cd="h">00</b><span>Hrs</span></span>
     <span class="cell"><b data-cd="m">00</b><span>Mins</span></span>
     <span class="cell"><b data-cd="s">00</b><span>Secs</span></span>
@@ -482,7 +481,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
     <p class="eyebrow"><span class="dot"></span>The best Latin party in Asia</p>
 
     <h1>
-      <span>Bangkok's</span>
+      <span>Bangkok's Best</span>
       <span class="accent">Latin Party</span>
     </h1>
     <p class="pitch">
@@ -1080,32 +1079,36 @@ footer .legal-links a:hover{color:var(--ink-2)}
     else if (qtyOverlay && qtyOverlay.classList.contains('open')) closeQty();
   });
 
-  /* ── Countdown: time left until the event starts —
-        once it hits zero, flip the bar to "live" ─── */
+  /* ── Countdown: scarcity-bar timer, resets to a fresh 2AM
+        (Bangkok time, UTC+7) every day — a running urgency
+        prompt, not tied to the actual event date/time. 2AM
+        Bangkok is a fixed 19:00 UTC regardless of the visitor's
+        own timezone, so this computes in UTC rather than using
+        the visitor's local clock. ─── */
   var cdEls = document.querySelectorAll('[data-cd]');
   if (cdEls.length) {
     var f = { h: [], m: [], s: [] };
     cdEls.forEach(function(el){ f[el.dataset.cd].push(el); });
     var pad = function(v){ return v < 10 ? '0' + v : '' + v; };
-    var EVENT_START = new Date('2026-08-29T22:00:00+07:00').getTime();
-    var stockMain = document.getElementById('stock-main');
-    var stockSub  = document.getElementById('stock-sub');
-    var stockCd   = document.getElementById('stock-cd');
+    var DAY_MS = 24 * 60 * 60 * 1000;
     var setAll = function(list, val){ list.forEach(function(el){ el.textContent = val; }); };
-    var goLive = function(){
-      if (stockMain) stockMain.textContent = 'LIVE RIGHT NOW';
-      if (stockSub)  stockSub.textContent  = 'FEW TICKETS LEFT';
-      if (stockCd)   stockCd.style.display = 'none';
+    var nextResetUTC = function(){
+      var now = Date.now();
+      var d = new Date();
+      var target = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 19, 0, 0, 0);
+      while (target <= now) target += DAY_MS;
+      return target;
     };
+    var target = nextResetUTC();
     var tick = function(){
-      var left = EVENT_START - Date.now();
-      if (left <= 0) { goLive(); clearInterval(cdTimer); return; }
+      var left = target - Date.now();
+      if (left <= 0) { target += DAY_MS; left = target - Date.now(); }
       setAll(f.h, pad(Math.floor(left / 36e5)));
       setAll(f.m, pad(Math.floor(left % 36e5 / 6e4)));
       setAll(f.s, pad(Math.floor(left % 6e4 / 1e3)));
     };
     tick();
-    var cdTimer = setInterval(tick, 1000);
+    setInterval(tick, 1000);
   }
 
   /* ── Gallery: two rows, built in JS so the photos
