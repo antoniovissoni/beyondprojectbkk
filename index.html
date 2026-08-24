@@ -32,9 +32,9 @@
 <style>
 :root{
   /* palette pulled from the poster: dark-to-bright red, white type */
-  --acc:#2563eb; --acc-hi:#3b82f6; --acc-dim:#1e40af;
-  --red:#2563eb;
-  --grad:linear-gradient(120deg,#123a8f 0%,#3b82f6 100%);
+  --acc:#2451d6; --acc-hi:#3f6eea; --acc-dim:#14245c;
+  --red:#2451d6;
+  --grad:linear-gradient(120deg,#14245c 0%,#2451d6 55%,#4ec8f0 100%);
   --gold:#e3ba5c; --gold-hi:#f3d489; --gold-dim:#c69c39; --gold-ink:#1c1408;
   --gold-grad:linear-gradient(120deg,#c99a33 0%,#f3d489 48%,#d8ac45 100%);
   --bg:#0d0908;                   /* page background — warm near-black       */
@@ -67,8 +67,8 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 .stock{
   position:fixed;top:0;left:0;right:0;z-index:70;min-height:var(--bar);
   display:flex;align-items:center;justify-content:center;gap:1.25rem;
-  background:linear-gradient(120deg,#1547d6 0%,#3b82f6 100%);color:#fff;padding:.5rem 1rem;
-  box-shadow:0 4px 24px rgba(21,71,214,.45);
+  background:linear-gradient(120deg,#14245c 0%,#2451d6 60%,#4ec8f0 100%);color:#fff;padding:.5rem 1rem;
+  box-shadow:0 4px 24px rgba(20,36,92,.5);
   transform:translateY(0);transition:transform .3s ease;
 }
 .stock.hide{transform:translateY(-100%)}
