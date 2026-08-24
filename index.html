@@ -354,12 +354,17 @@ section{padding-block:5rem}
 .qty-opt:hover .arw{color:var(--acc);transform:translateX(3px)}
 .qty-opt .ico{width:1.5rem;height:1.5rem;flex:none;color:var(--ink-3);transition:color .15s ease}
 .qty-opt:hover .ico{color:var(--acc)}
+.qty-opt:disabled{opacity:.5;cursor:default}
+.qty-opt.loading{opacity:.7}
 
 .qty-foot{margin-top:1.25rem;text-align:center;font-size:.75rem;color:var(--ink-3);line-height:1.6}
 .qty-foot .legal-note{display:block;margin-top:.5rem;font-size:.6875rem;color:var(--ink-3)}
 .qty-foot .legal-note a{color:var(--ink-2);text-decoration:underline;text-underline-offset:.15em}
 .qty-foot .legal-note a:hover{color:var(--ink)}
 .pay-summary{text-align:center;font-size:.8125rem;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.04em;margin:-.5rem 0 1.25rem}
+.qty-error{margin-top:.875rem;text-align:center;font-size:.8125rem;font-weight:600;color:var(--acc)}
+.qty-soldout{text-align:center;padding:2rem 1rem;color:var(--ink-2);font-weight:600;line-height:1.6}
+.qty-soldout .th{margin-top:.35rem;font-size:.8125rem;color:var(--ink-3);font-weight:400}
 
 @media (min-width:640px){
   .qty-overlay{align-items:center}
@@ -594,47 +599,46 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
     <div class="tiers">
 
-      <!-- Early bird — SOLD OUT -->
-      <div class="tier sold" aria-disabled="true">
+      <!-- Early bird — status set by JS from Stripe -->
+      <a class="tier sold" id="tier-early_bird" href="#" aria-disabled="true">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
           <rect x="4" y="10.5" width="16" height="10" rx="2.5"/>
           <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/>
         </svg>
         <div class="meta">
           <p class="name">Early bird</p>
-          <p class="price">฿400</p>
-          <span class="th">บัตรราคาพิเศษ · ขายหมดแล้ว</span>
+          <p class="price" id="price-early_bird">฿400</p>
+          <span class="th">บัตรราคาพิเศษ</span>
         </div>
-        <span class="tag">Sold out</span>
-      </div>
+        <span class="tag" id="tag-early_bird">Sold out</span>
+      </a>
 
-      <!-- Regular — SOLD OUT -->
-      <div class="tier sold" aria-disabled="true">
+      <!-- Regular — status set by JS from Stripe -->
+      <a class="tier sold" id="tier-regular" href="#" aria-disabled="true">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9.5V7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2.5a2.5 2.5 0 0 0 0 5V17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.5a2.5 2.5 0 0 0 0-5Z"/>
           <path d="M14 6v12" stroke-dasharray="2 2.5"/>
         </svg>
         <div class="meta">
           <p class="name">Regular ticket</p>
-          <p class="price">฿500</p>
-          <span class="th">บัตรราคาปกติ · ขายหมดแล้ว</span>
+          <p class="price" id="price-regular">฿500</p>
+          <span class="th">บัตรราคาปกติ</span>
         </div>
-        <span class="tag">Sold out</span>
-      </div>
+        <span class="tag" id="tag-regular">Sold out</span>
+      </a>
 
-      <!-- Final release — LIVE -->
-      <a class="tier live" href="https://buy.stripe.com/6oU3coaRb8cb4HRckn77O0d"
-         data-track="ticket" target="_blank" rel="noopener">
+      <!-- Final release — status set by JS from Stripe -->
+      <a class="tier live" id="tier-final" href="#" data-track="ticket">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="8.5"/>
           <path d="M12 7.5V12l3 2"/>
         </svg>
         <div class="meta">
           <p class="name">Final release</p>
-          <p class="price">฿600</p>
-          <span class="th">รอบสุดท้าย · รวมเครื่องดื่ม 1 แก้ว · เปิดขายแล้ว</span>
+          <p class="price" id="price-final">฿600</p>
+          <span class="th">รอบสุดท้าย · รวมเครื่องดื่ม 1 แก้ว</span>
         </div>
-        <span class="tag">Buy now</span>
+        <span class="tag" id="tag-final">Buy now</span>
       </a>
     </div>
 
@@ -739,7 +743,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
 </footer>
 
 <div class="sticky" id="sticky">
-  <a class="s-ticket" href="https://buy.stripe.com/6oU3coaRb8cb4HRckn77O0d" data-track="ticket" target="_blank" rel="noopener">Get ticket · ฿600</a>
+  <a class="s-ticket" id="sticky-ticket" href="#" data-track="ticket">Get ticket · <span id="sticky-price">฿600</span></a>
   <a class="s-vip" href="https://luma.com/j7zd0cl5" target="_blank" rel="noopener">VIP</a>
 </div>
 
@@ -761,8 +765,8 @@ footer .legal-links a:hover{color:var(--ink-2)}
     <div class="qty-list" id="qty-list"><!-- built by JS --></div>
 
     <p class="qty-foot">
-      ฿600 per ticket · 1 drink included · You'll get an email with a QR for your tickets soon
-      <span class="th">฿600 ต่อบัตร 1 ใบ · รวมเครื่องดื่ม 1 แก้ว · คุณจะได้รับอีเมลพร้อม QR สำหรับบัตรของคุณเร็ว ๆ นี้</span>
+      <span id="qty-foot-price">฿600</span> per ticket · 1 drink included · You'll get an email with a QR for your tickets soon
+      <span class="th"><span id="qty-foot-price-th">฿600</span> ต่อบัตร 1 ใบ · รวมเครื่องดื่ม 1 แก้ว · คุณจะได้รับอีเมลพร้อม QR สำหรับบัตรของคุณเร็ว ๆ นี้</span>
     </p>
   </div>
 </div>
@@ -791,6 +795,9 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
     <p class="pay-summary" id="pay-summary"></p>
 
+    <p class="qty-error" id="pay-error" hidden>Something went wrong — please try again.<span
+        class="th" style="display:block;font-size:.75rem;opacity:.8;margin-top:.25rem">เกิดข้อผิดพลาด กรุณาลองอีกครั้ง</span></p>
+
     <div class="qty-list" id="pay-list"><!-- built by JS --></div>
 
     <p class="qty-foot">
@@ -813,41 +820,102 @@ footer .legal-links a:hover{color:var(--ink-2)}
   /* ── Ticket quantity + payment method picker ────
      Step 1: pick a quantity (1-5 tickets).
      Step 2: pick a payment method — PromptPay (HitPay)
-     or Card (Stripe). Each pair's success URL points at
-     its matching thank-you page, configured on the
-     provider's side. */
-  var UNIT = 600;                        // single-ticket price — flat, no group discount
-  var OPTIONS = [
-    { qty:1, price:600,  stripe:'https://buy.stripe.com/6oU3coaRb8cb4HRckn77O0d', hitpay:'https://hitpay.link/zz1gst' },
-    { qty:2, price:1200, stripe:'https://buy.stripe.com/aFa00ccZj9gfden0BF77O0f', hitpay:'https://hitpay.link/zm7u5p' },
-    { qty:3, price:1800, stripe:'https://buy.stripe.com/3cIaEQ5wR8cb5LVckn77O0g', hitpay:'https://hitpay.link/skykwp' },
-    { qty:4, price:2400, stripe:'https://buy.stripe.com/aFacMY4sN787b6f4RV77O0h', hitpay:'https://hitpay.link/uggpaf' },
-    { qty:5, price:3000, stripe:'https://buy.stripe.com/eVq7sE1gBdwvgqzdor77O0i', hitpay:'https://hitpay.link/mmeeyv' }
-  ];
+     or Card (Stripe). Both create the order server-side
+     (create-checkout-session.js / create-promptpay-request.js)
+     against whichever tier is live, so the price and
+     sold-out state always match get-pricing.js/Stripe —
+     nothing here is hardcoded once that call resolves. */
+  var MAX_QTY  = 5;
+  var UNIT     = 600;     // fallback shown until get-pricing.js resolves
+  var hasLive  = true;
+  var checkingOut = false;
+
+  var TAG_TEXT = { sold: 'Sold out', live: 'Buy now', soon: 'Not open' };
 
   var qtyOverlay  = document.getElementById('qty');
   var payOverlay  = document.getElementById('pay');
   var qtyList     = document.getElementById('qty-list');
   var payList     = document.getElementById('pay-list');
   var paySummary  = document.getElementById('pay-summary');
+  var payError    = document.getElementById('pay-error');
   var lastFocus   = null;
   var selected    = null;
 
-  if (qtyList) {
-    qtyList.innerHTML = OPTIONS.map(function(o){
-      var total = o.price.toLocaleString('en-US');
-      var savings = (UNIT * o.qty) - o.price;
-      var save = savings > 0 ? '<span class="save">Save ฿' + savings.toLocaleString('en-US') + '</span>' : '';
-      return '<button class="qty-opt" type="button" data-qty="' + o.qty + '">' +
+  function fmt(n){ return n.toLocaleString('en-US'); }
+
+  function renderTiers(tiers){
+    tiers.forEach(function(t){
+      var el = document.getElementById('tier-' + t.key);
+      if (!el) return;
+      el.className = 'tier ' + t.status;
+      if (t.status === 'live') {
+        el.removeAttribute('aria-disabled');
+        el.setAttribute('data-track', 'ticket');
+      } else {
+        el.setAttribute('aria-disabled', 'true');
+        el.removeAttribute('data-track');
+      }
+      var priceEl = document.getElementById('price-' + t.key);
+      if (priceEl) priceEl.textContent = '฿' + fmt(t.unitAmount);
+      var tagEl = document.getElementById('tag-' + t.key);
+      if (tagEl) tagEl.textContent = TAG_TEXT[t.status] || tagEl.textContent;
+    });
+  }
+
+  function renderPrice(){
+    var txt = '฿' + fmt(UNIT);
+    ['qty-foot-price','qty-foot-price-th'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.textContent = txt;
+    });
+    var stickyTicket = document.getElementById('sticky-ticket');
+    if (stickyTicket) {
+      if (hasLive) {
+        stickyTicket.removeAttribute('aria-disabled');
+        stickyTicket.innerHTML = 'Get ticket · <span id="sticky-price">' + txt + '</span>';
+      } else {
+        stickyTicket.setAttribute('aria-disabled', 'true');
+        stickyTicket.textContent = 'Sold out';
+      }
+    }
+  }
+
+  function renderQtyList(){
+    if (!qtyList) return;
+    if (!hasLive) {
+      qtyList.innerHTML = '<p class="qty-soldout">All tickets are sold out.<br><span class="th">บัตรขายหมดแล้ว</span></p>';
+      return;
+    }
+    var html = '';
+    for (var qty = 1; qty <= MAX_QTY; qty++) {
+      var total = qty * UNIT;                 // flat price — no group discount
+      html += '<button class="qty-opt" type="button" data-qty="' + qty + '">' +
                '<span class="meta">' +
-                 '<span class="n">' + o.qty + (o.qty === 1 ? ' Ticket' : ' Tickets') +
-                   '<small>' + o.qty + ' บัตร</small></span>' +
-                 '<span class="p"><span class="amt">฿' + total + '</span>' + save + '</span>' +
+                 '<span class="n">' + qty + (qty === 1 ? ' Ticket' : ' Tickets') +
+                   '<small>' + qty + ' บัตร</small></span>' +
+                 '<span class="p"><span class="amt">฿' + fmt(total) + '</span></span>' +
                '</span>' +
                '<span class="arw" aria-hidden="true">→</span>' +
              '</button>';
-    }).join('');
+    }
+    qtyList.innerHTML = html;
   }
+  renderQtyList();
+  renderPrice();
+
+  fetch('/.netlify/functions/get-pricing')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(data){
+      if (!data) return;
+      var live = data.tiers && data.tiers.find(function(t){ return t.status === 'live'; });
+      hasLive = !!live;
+      UNIT    = live ? live.unitAmount : UNIT;
+      MAX_QTY = data.maxQty || MAX_QTY;
+      if (data.tiers) renderTiers(data.tiers);
+      renderPrice();
+      renderQtyList();
+    })
+    .catch(function(){ /* keep fallback pricing */ });
 
   if (payList) {
     payList.innerHTML =
@@ -906,11 +974,12 @@ footer .legal-links a:hover{color:var(--ink-2)}
   function closeQty(){
     hide(qtyOverlay, true);
   }
-  function openPay(o){
-    selected = o;
+  function openPay(qty){
+    selected = { qty: qty, price: qty * UNIT };
     if (paySummary) {
-      paySummary.textContent = o.qty + (o.qty === 1 ? ' Ticket · ' : ' Tickets · ') + '฿' + o.price.toLocaleString('en-US');
+      paySummary.textContent = qty + (qty === 1 ? ' Ticket · ' : ' Tickets · ') + '฿' + fmt(selected.price);
     }
+    if (payError) payError.hidden = true;
     hide(qtyOverlay, false);
     show(payOverlay);
   }
@@ -922,38 +991,77 @@ footer .legal-links a:hover{color:var(--ink-2)}
     show(qtyOverlay);
   }
 
-  /* every ticket CTA opens the picker instead of jumping straight to checkout */
-  document.querySelectorAll('[data-track="ticket"], .hero .btn, .hero-cta').forEach(function(el){
-    el.addEventListener('click', function(e){
-      e.preventDefault();
-      openQty();
-    });
+  /* every ticket CTA opens the picker instead of jumping straight to checkout.
+     Delegated (not bound per-element) because which tier carries
+     data-track="ticket" changes at runtime once renderTiers() runs. */
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('[data-track="ticket"], .hero .btn, .hero-cta');
+    if (!el || el.getAttribute('aria-disabled') === 'true') return;
+    e.preventDefault();
+    openQty();
   });
 
   if (qtyList) {
     qtyList.addEventListener('click', function(e){
       var opt = e.target.closest('.qty-opt');
       if (!opt) return;
-      var o = OPTIONS.filter(function(x){ return x.qty === Number(opt.dataset.qty); })[0];
-      if (o) openPay(o);
+      openPay(Number(opt.dataset.qty) || 1);
     });
   }
   if (payList) {
     payList.addEventListener('click', function(e){
       var opt = e.target.closest('.qty-opt');
-      if (!opt || !selected) return;
-      var url = opt.dataset.method === 'promptpay' ? selected.hitpay : selected.stripe;
+      if (!opt || !selected || checkingOut) return;
+      var method = opt.dataset.method;
+
+      checkingOut = true;
+      if (payError) payError.hidden = true;
+      payList.querySelectorAll('.qty-opt').forEach(function(b){ b.disabled = true; });
+      opt.classList.add('loading');
+
       loadPixel();
       if (typeof fbq !== 'undefined') {
         fbq('track','AddPaymentInfo',{
-          content_name:'Final Release Ticket Aug 22', payment_type:opt.dataset.method,
+          content_name:'Final Release Ticket Aug 22', payment_type:method,
           value:selected.price, currency:'THB', num_items:selected.qty
         });
       }
-      window.open(url, '_blank', 'noopener');
-      closePay();
+
+      var endpoint = method === 'promptpay'
+        ? '/.netlify/functions/create-promptpay-request'
+        : '/.netlify/functions/create-checkout-session';
+      var body = method === 'promptpay'
+        ? { qty: selected.qty }
+        : { qty: selected.qty, dest: 'main' };
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+        .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+        .then(function(data){
+          if (!data.url) return Promise.reject();
+          window.location.href = data.url;
+        })
+        .catch(function(){
+          checkingOut = false;
+          payList.querySelectorAll('.qty-opt').forEach(function(b){ b.disabled = false; b.classList.remove('loading'); });
+          opt.classList.remove('loading');
+          if (payError) payError.hidden = false;
+        });
     });
   }
+
+  /* returning via the browser's back button restores the page from
+     bfcache exactly as we left it — mid-checkout, buttons disabled.
+     Reset that state so it's usable again immediately. */
+  window.addEventListener('pageshow', function(e){
+    if (!e.persisted) return;
+    checkingOut = false;
+    if (payList) payList.querySelectorAll('.qty-opt').forEach(function(b){ b.disabled = false; b.classList.remove('loading'); });
+    if (payError) payError.hidden = true;
+  });
 
   if (qtyOverlay) {
     qtyOverlay.addEventListener('click', function(e){
@@ -1141,11 +1249,10 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
     if (opt && opt.dataset.qty) {                // a quantity was chosen
       var q = Number(opt.dataset.qty) || 1;
-      var chosen = OPTIONS.filter(function(x){ return x.qty === q; })[0];
       fbq('track','InitiateCheckout',{
         content_name:'Final Release Ticket Aug 22',
         content_type:'product',
-        value:chosen ? chosen.price : q * UNIT, currency:'THB', num_items:q
+        value:q * UNIT, currency:'THB', num_items:q
       });
       return;
     }
