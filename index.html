@@ -356,6 +356,14 @@ section{padding-block:5rem}
 .qty-opt:hover .ico{color:var(--acc)}
 .qty-opt:disabled{opacity:.5;cursor:default}
 .qty-opt.loading{opacity:.7}
+.qty-opt .spinner{
+  display:none;flex:none;width:1.125rem;height:1.125rem;
+  border:2px solid rgba(255,255,255,.15);border-top-color:var(--ink);
+  border-radius:50%;animation:qty-spin .6s linear infinite;
+}
+.qty-opt.loading .arw{display:none}
+.qty-opt.loading .spinner{display:inline-block}
+@keyframes qty-spin{to{transform:rotate(360deg)}}
 
 .qty-foot{margin-top:1.25rem;text-align:center;font-size:.75rem;color:var(--ink-3);line-height:1.6}
 .qty-foot .legal-note{display:block;margin-top:.5rem;font-size:.6875rem;color:var(--ink-3)}
@@ -480,10 +488,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
     <p class="eyebrow"><span class="dot"></span>The best Latin party in Asia</p>
 
-    <h1>
-      <span>Bangkok's Best</span>
-      <span class="accent">Latin Party</span>
-    </h1>
+    <h1>Bangkok's Best<br><span class="accent">Latin Party</span></h1>
     <p class="pitch">
       A Latin night at REVO BANGKOK, dedicated to the songs that defined
       a generation. <b>Reggaeton, perreo and Latin anthems until late.</b>
@@ -840,6 +845,10 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
   function fmt(n){ return n.toLocaleString('en-US'); }
 
+  // ฿100 off per extra ticket beyond the first — matches
+  // netlify/functions/_shared/tiers.js's getBundleDiscount exactly.
+  function bundleDiscount(qty){ return Math.max(0, qty - 1) * 100; }
+
   function renderTiers(tiers){
     tiers.forEach(function(t){
       var el = document.getElementById('tier-' + t.key);
@@ -885,12 +894,14 @@ footer .legal-links a:hover{color:var(--ink-2)}
     }
     var html = '';
     for (var qty = 1; qty <= MAX_QTY; qty++) {
-      var total = qty * UNIT;                 // flat price — no group discount
+      var discount = bundleDiscount(qty);
+      var total = qty * UNIT - discount;
+      var save = discount > 0 ? '<span class="save">Save ฿' + fmt(discount) + '</span>' : '';
       html += '<button class="qty-opt" type="button" data-qty="' + qty + '">' +
                '<span class="meta">' +
                  '<span class="n">' + qty + (qty === 1 ? ' Ticket' : ' Tickets') +
                    '<small>' + qty + ' บัตร</small></span>' +
-                 '<span class="p"><span class="amt">฿' + fmt(total) + '</span></span>' +
+                 '<span class="p"><span class="amt">฿' + fmt(total) + '</span>' + save + '</span>' +
                '</span>' +
                '<span class="arw" aria-hidden="true">→</span>' +
              '</button>';
@@ -931,6 +942,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
           '<span class="p">Pay by QR code</span>' +
         '</span>' +
         '<span class="arw" aria-hidden="true">→</span>' +
+        '<span class="spinner" aria-hidden="true"></span>' +
       '</button>' +
       '<button class="qty-opt" type="button" data-method="card">' +
         '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
@@ -942,6 +954,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
           '<span class="p">Apple Pay, Visa, Mastercard, Amex</span>' +
         '</span>' +
         '<span class="arw" aria-hidden="true">→</span>' +
+        '<span class="spinner" aria-hidden="true"></span>' +
       '</button>';
   }
 
@@ -972,7 +985,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
     hide(qtyOverlay, true);
   }
   function openPay(qty){
-    selected = { qty: qty, price: qty * UNIT };
+    selected = { qty: qty, price: qty * UNIT - bundleDiscount(qty) };
     if (paySummary) {
       paySummary.textContent = qty + (qty === 1 ? ' Ticket · ' : ' Tickets · ') + '฿' + fmt(selected.price);
     }
@@ -1253,7 +1266,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
       fbq('track','InitiateCheckout',{
         content_name:'Final Release Ticket Aug 29',
         content_type:'product',
-        value:q * UNIT, currency:'THB', num_items:q
+        value:q * UNIT - bundleDiscount(q), currency:'THB', num_items:q
       });
       return;
     }

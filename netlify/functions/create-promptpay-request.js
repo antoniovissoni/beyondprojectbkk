@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const Stripe = require('stripe');
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-const { fetchTiers, getLiveTier } = require('./_shared/tiers');
+const { fetchTiers, getLiveTier, getBundleDiscount } = require('./_shared/tiers');
 const { createPaymentRequest } = require('./_shared/hitpay');
 
 const MAX_QTY = 5;
@@ -43,8 +43,10 @@ exports.handler = async (event) => {
     // trusting anything else in the (possibly minimal) webhook payload.
     const referenceNumber = 'bkk-ticket-qty' + qty + '-' + crypto.randomBytes(6).toString('hex');
 
+    // Same bundle discount as the card path (getBundleDiscount) — PromptPay
+    // must always land on the identical total for the same quantity.
     const request = await createPaymentRequest({
-      amount: live.unitAmount * qty,
+      amount: live.unitAmount * qty - getBundleDiscount(qty),
       currency: live.currency,
       email,
       name,

@@ -1,6 +1,6 @@
 const Stripe = require('stripe');
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-const { fetchTiers, getLiveTier } = require('./_shared/tiers');
+const { fetchTiers, getLiveTier, getBundleDiscount } = require('./_shared/tiers');
 
 const MAX_QTY = 5;
 
@@ -43,9 +43,24 @@ exports.handler = async (event) => {
     const proto = event.headers['x-forwarded-proto'] || 'https';
     const siteUrl = proto + '://' + event.headers.host;
     const target = DESTINATIONS[dest];
+
+    // Bundle discount applies online only — door walk-ups pay full price
+    // unless staff apply a promo code (allow_promotion_codes below).
+    const discount = dest === 'main' ? getBundleDiscount(qty) : 0;
+    const lineItem = discount > 0
+      ? {
+          price_data: {
+            currency: live.currency.toLowerCase(),
+            product: live.productId,
+            unit_amount: Math.round((live.unitAmount * qty - discount) * 100)
+          },
+          quantity: 1
+        }
+      : { price: live.priceId, quantity: qty };
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      line_items: [{ price: live.priceId, quantity: qty }],
+      line_items: [lineItem],
       success_url: siteUrl + target.success + '?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: siteUrl + target.cancel,
       metadata: { qty: String(qty), tier: live.key },
