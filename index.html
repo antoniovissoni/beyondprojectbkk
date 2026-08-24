@@ -104,11 +104,15 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 .brand{width:min(9rem,34vw);margin:0 auto 1.75rem}
 
 h1{
-  font-size:clamp(2.5rem,11.5vw,4rem);font-weight:800;line-height:.93;
+  font-weight:800;line-height:.93;
   letter-spacing:-.04em;text-transform:uppercase;
 }
 h1 span{display:block}
-h1 .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 .lead{font-size:clamp(1.5rem,7.5vw,2.5rem);color:var(--ink-2)}
+h1 .accent{
+  font-size:clamp(2.5rem,11.5vw,4rem);margin-top:.1rem;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
 
 .edition{
   margin-top:1.25rem;font-size:.75rem;font-weight:600;letter-spacing:.26em;
@@ -488,7 +492,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
     <p class="eyebrow"><span class="dot"></span>The best Latin party in Asia</p>
 
-    <h1>Bangkok's Best<br><span class="accent">Latin Party</span></h1>
+    <h1><span class="lead">Bangkok's Best</span><span class="accent">Latin Party</span></h1>
     <p class="pitch">
       A Latin night at REVO BANGKOK, dedicated to the songs that defined
       a generation. <b>Reggaeton, perreo and Latin anthems until late.</b>
