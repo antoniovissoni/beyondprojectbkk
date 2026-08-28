@@ -54,23 +54,23 @@ async function sendPostHogPurchase(record, qty) {
   });
 }
 
+// Throws on failure (unlike the old version) so the caller can make HitPay
+// retry the webhook delivery instead of silently losing the ticket — a
+// guest that fails to get added here previously left no trace beyond a
+// console.error, and HitPay never re-delivered because we always answered
+// 200.
 async function addLumaGuest(record, qty) {
   if (!process.env.LUMA_API_KEY || !process.env.LUMA_EVENT_ID) {
-    console.error('Luma not configured (LUMA_API_KEY / LUMA_EVENT_ID missing) — skipping guest add for', record.id);
-    return;
+    throw new Error('Luma not configured (LUMA_API_KEY / LUMA_EVENT_ID missing)');
   }
 
-  try {
-    const typesUsed = await addGuestWithNextAvailableTicket(process.env.LUMA_EVENT_ID, {
-      email: record.email,
-      name: record.name,
-      qty
-    });
-    const breakdown = typesUsed.map((t) => t.name).join(', ');
-    console.log(`Added ${record.email} to Luma (${qty}x: ${breakdown}) for HitPay payment ${record.id}`);
-  } catch (err) {
-    console.error(`Failed to add Luma guest for HitPay payment ${record.id}:`, err.message);
-  }
+  const typesUsed = await addGuestWithNextAvailableTicket(process.env.LUMA_EVENT_ID, {
+    email: record.email,
+    name: record.name,
+    qty
+  });
+  const breakdown = typesUsed.map((t) => t.name).join(', ');
+  console.log(`Added ${record.email} to Luma (${qty}x: ${breakdown}) for HitPay payment ${record.id}`);
 }
 
 exports.handler = async (event) => {
@@ -112,7 +112,7 @@ exports.handler = async (event) => {
     record = await getPaymentRequest(payload.id);
   } catch (err) {
     console.error(`Failed to fetch HitPay payment request ${payload.id}:`, err.message);
-    return { statusCode: 200, body: 'ok' };
+    return { statusCode: 502, body: 'hitpay lookup failed' };
   }
 
   if (record.status !== 'completed') {
@@ -124,12 +124,28 @@ exports.handler = async (event) => {
     return { statusCode: 200, body: 'ok' };
   }
 
+  // Luma is the one side effect that must not be silently lost: if it
+  // fails, answer with a non-2xx so HitPay's webhook retry logic re-delivers
+  // this event later instead of us swallowing the error and never trying
+  // again. Meta/PostHog are best-effort analytics — fired only after Luma
+  // has actually succeeded, so a hiccup in either of them can never trigger
+  // a retry that would risk double-adding the guest.
+  try {
+    await addLumaGuest(record, qty);
+  } catch (err) {
+    console.error(`Failed to add Luma guest for HitPay payment ${record.id}:`, err.message);
+    return { statusCode: 502, body: 'luma add failed' };
+  }
+
   const proto = event.headers['x-forwarded-proto'] || 'https';
   const siteUrl = proto + '://' + event.headers.host;
   await Promise.all([
-    sendMetaPurchase(record, qty, siteUrl),
-    sendPostHogPurchase(record, qty),
-    addLumaGuest(record, qty)
+    sendMetaPurchase(record, qty, siteUrl).catch((err) =>
+      console.error(`Meta CAPI purchase event failed for HitPay payment ${record.id}:`, err.message)
+    ),
+    sendPostHogPurchase(record, qty).catch((err) =>
+      console.error(`PostHog purchase event failed for HitPay payment ${record.id}:`, err.message)
+    )
   ]);
 
   return { statusCode: 200, body: 'ok' };
