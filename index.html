@@ -31,10 +31,10 @@
 
 <style>
 :root{
-  /* palette: red-to-orange, white type */
-  --acc:#ff6b35; --acc-hi:#ff8552; --acc-dim:#e0521f;
-  --red:#f5333f;
-  --grad:linear-gradient(120deg,var(--red) 0%,#ff8c42 100%);
+  /* palette: deep blue to sky blue, white type */
+  --acc:#0ea5e9; --acc-hi:#38bdf8; --acc-dim:#0284c7;
+  --red:#0369a1;
+  --grad:linear-gradient(120deg,var(--red) 0%,#67e8f9 100%);
   --gold:#e3ba5c; --gold-hi:#f3d489; --gold-dim:#c69c39; --gold-ink:#1c1408;
   --gold-grad:linear-gradient(120deg,#c99a33 0%,#f3d489 48%,#d8ac45 100%);
   --bg:#0d0908;                   /* page background — warm near-black       */
@@ -68,7 +68,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   position:fixed;top:0;left:0;right:0;z-index:70;min-height:var(--bar);
   display:flex;align-items:center;justify-content:center;gap:1.25rem;
   background:var(--grad);color:#fff;padding:.5rem 1rem;
-  box-shadow:0 4px 24px rgba(255,107,53,.35);
+  box-shadow:0 4px 24px rgba(14,165,233,.35);
   transform:translateY(0);transition:transform .3s ease;
 }
 .stock.hide{transform:translateY(-100%)}
@@ -91,13 +91,13 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   min-height:95svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:calc(var(--bar) + 2.5rem) 0 3rem;position:relative;overflow:hidden;
   background:
-    radial-gradient(ellipse 120% 70% at 50% -10%,rgba(245,51,63,.30),transparent 62%),
-    radial-gradient(ellipse 90% 55% at 50% 108%,rgba(255,107,53,.16),transparent 68%),
+    radial-gradient(ellipse 120% 70% at 50% -10%,rgba(3,105,161,.30),transparent 62%),
+    radial-gradient(ellipse 90% 55% at 50% 108%,rgba(14,165,233,.16),transparent 68%),
     linear-gradient(180deg,#1a0b0b 0%,var(--bg) 58%);
 }
 .hero::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 45% at 50% 30%,rgba(255,140,66,.14),transparent 70%);
+  background:radial-gradient(ellipse 70% 45% at 50% 30%,rgba(103,232,249,.14),transparent 70%);
 }
 .hero > *{position:relative;z-index:1}
 
@@ -128,14 +128,15 @@ h1 .accent{
 
 /* ─── FLAT BUTTONS — no gradients, no shadows, no lift ─── */
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
-  min-height:3.25rem;padding:0 2rem;border-radius:.625rem;
+  display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem;
+  min-height:3.25rem;padding:.5rem 2rem;border-radius:.625rem;
   font-size:1rem;font-weight:700;letter-spacing:-.01em;
   background:var(--acc);color:#fff;
   transition:background-color .15s ease;
 }
 .btn:hover{background:var(--acc-hi)}
 .btn:active{background:var(--acc-dim)}
+.btn .th{color:rgba(255,255,255,.75);font-size:.6875rem;font-weight:400;margin-top:0}
 .hero .btn{margin-top:1.75rem;text-transform:uppercase;letter-spacing:.02em}
 
 .btn-ghost{
@@ -392,10 +393,10 @@ section{padding-block:5rem}
 /* ─── PITCH BITS: badge, kickers ───────────────── */
 .eyebrow{
   display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;
-  border:1px solid rgba(245,51,63,.45);border-radius:999px;
-  background:linear-gradient(120deg,rgba(245,51,63,.18),rgba(255,140,66,.12));
+  border:1px solid rgba(3,105,161,.45);border-radius:999px;
+  background:linear-gradient(120deg,rgba(3,105,161,.18),rgba(103,232,249,.12));
   padding:.5rem .85rem;
-  font-size:.625rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#ffc3a5;
+  font-size:.625rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#a5f3fc;
 }
 .eyebrow .dot{width:.375rem;height:.375rem;border-radius:50%;background:var(--red);flex:none}
 
@@ -506,8 +507,8 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
     <div class="facts">
       <p class="line">
-        Saturday, September 5 · 6PM
-        <span class="th">วันเสาร์ที่ 5 กันยายน · 18:00 น.</span>
+        Saturday, September 5 · 6PM Until Late
+        <span class="th">วันเสาร์ที่ 5 กันยายน · 18:00 น. ยาวถึงดึก</span>
       </p>
       <a class="line place" href="https://maps.app.goo.gl/GLMJ84RuGFrLqJqBA" target="_blank" rel="noopener">
         VIEW ROOFTOP
@@ -515,7 +516,10 @@ footer .legal-links a:hover{color:var(--ink-2)}
       </a>
     </div>
 
-    <a class="btn" href="#tickets">Get your tickets</a>
+    <a class="btn" href="#tickets">
+      Get tickets now
+      <span class="th">ซื้อบัตรเลย</span>
+    </a>
   </div>
 </header>
 
@@ -528,7 +532,10 @@ footer .legal-links a:hover{color:var(--ink-2)}
            muted loop playsinline preload="none" aria-label="BEYOND Latin party highlight video"></video>
     <img class="video-logo" src="assets/logo-wide.webp" alt="BEYOND" width="1600" height="336" loading="lazy" decoding="async">
     <div class="video-cta">
-      <a class="btn hero-cta" href="#tickets">Get your tickets</a>
+      <a class="btn hero-cta" href="#tickets">
+        Get tickets now
+        <span class="th">ซื้อบัตรเลย</span>
+      </a>
     </div>
   </div>
 </section>
