@@ -91,14 +91,22 @@ async function addLumaGuest(session) {
     return;
   }
 
+  // Guests keep landing in the wrong Luma event despite this reading
+  // process.env.LUMA_EVENT_ID fresh every call with no caching or fallback —
+  // logging the raw value (JSON-stringified so stray whitespace/newlines
+  // from a copy-paste into the Netlify UI are visible) to confirm whether
+  // the deployed value actually matches what's intended.
+  console.log(`LUMA_EVENT_ID as read by this invocation: ${JSON.stringify(process.env.LUMA_EVENT_ID)}`);
+
   try {
-    const typesUsed = await addGuestWithNextAvailableTicket(process.env.LUMA_EVENT_ID, {
+    const eventId = process.env.LUMA_EVENT_ID;
+    const typesUsed = await addGuestWithNextAvailableTicket(eventId, {
       email,
       name: session.customer_details.name,
       qty: Number(session.metadata.qty)
     });
     const breakdown = typesUsed.map((t) => t.name).join(', ');
-    console.log(`Added ${email} to Luma (${session.metadata.qty}x: ${breakdown}) for session ${session.id}`);
+    console.log(`Added ${email} to Luma event ${eventId} (${session.metadata.qty}x: ${breakdown}) for session ${session.id}`);
   } catch (err) {
     console.error(`Failed to add Luma guest for session ${session.id}:`, err.message);
   }

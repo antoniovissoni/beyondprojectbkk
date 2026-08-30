@@ -64,13 +64,21 @@ async function addLumaGuest(record, qty) {
     throw new Error('Luma not configured (LUMA_API_KEY / LUMA_EVENT_ID missing)');
   }
 
-  const typesUsed = await addGuestWithNextAvailableTicket(process.env.LUMA_EVENT_ID, {
+  // Guests keep landing in the wrong Luma event despite this reading
+  // process.env.LUMA_EVENT_ID fresh every call with no caching or fallback —
+  // logging the raw value (JSON-stringified so stray whitespace/newlines
+  // from a copy-paste into the Netlify UI are visible) to confirm whether
+  // the deployed value actually matches what's intended.
+  console.log(`LUMA_EVENT_ID as read by this invocation: ${JSON.stringify(process.env.LUMA_EVENT_ID)}`);
+
+  const eventId = process.env.LUMA_EVENT_ID;
+  const typesUsed = await addGuestWithNextAvailableTicket(eventId, {
     email: record.email,
     name: record.name,
     qty
   });
   const breakdown = typesUsed.map((t) => t.name).join(', ');
-  console.log(`Added ${record.email} to Luma (${qty}x: ${breakdown}) for HitPay payment ${record.id}`);
+  console.log(`Added ${record.email} to Luma event ${eventId} (${qty}x: ${breakdown}) for HitPay payment ${record.id}`);
 }
 
 exports.handler = async (event) => {
