@@ -67,6 +67,7 @@ exports.handler = async (event) => {
 
     if (discount > 0) {
       const promoId = await findPromotionCodeId(discount);
+      console.log(`Bundle discount ${discount} THB for qty ${qty}: promo code ${DISCOUNT_CODES[discount]} -> ${promoId || 'NOT FOUND'}`);
       if (promoId) {
         discounts = [{ promotion_code: promoId }];
       } else {
