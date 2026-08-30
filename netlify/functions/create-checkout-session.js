@@ -73,6 +73,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({ url: session.url })
     };
   } catch (err) {
+    console.error('create-checkout-session failed:', err.message);
     return { statusCode: 500, body: JSON.stringify({ error: 'checkout_unavailable' }) };
   }
 };
