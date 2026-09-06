@@ -3,7 +3,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const { fetchTiers, getLiveTier } = require('./_shared/tiers');
 const { findBundleCoupon } = require('./_shared/bundle-coupon');
 
-const MAX_QTY = 5;
+const MAX_QTY = 20;
 
 // Where Stripe sends the buyer back to. `door` is the at-the-door sales
 // flow (staff-facing, e.g. a tablet at the gate) — same event, same

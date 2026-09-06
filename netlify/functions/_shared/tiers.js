@@ -40,11 +40,15 @@ function getLiveTier(tiers) {
 }
 
 // Online bundle pricing: ฿100 off per extra ticket beyond the first
-// (2 tickets = ฿100 off, 3 = ฿200 off, ... 5 = ฿400 off). Door sales
-// don't get this automatically — walk-ups pay full price unless staff
-// apply a promo code on the Stripe checkout page.
+// (2 tickets = ฿100 off, 3 = ฿200 off, ... 5 = ฿400 off). There's no
+// coupon beyond the 5-ticket bundle (see bundle-coupon.js), so any
+// larger quantity is capped at that same ฿400 — must stay in lock-step
+// with bundleCouponName's cap so Card and PromptPay always land on the
+// same total for a given qty. Door sales don't get this automatically —
+// walk-ups pay full price unless staff apply a promo code on the Stripe
+// checkout page.
 function getBundleDiscount(qty) {
-  return Math.max(0, qty - 1) * 100;
+  return Math.max(0, Math.min(qty, 5) - 1) * 100;
 }
 
 module.exports = { fetchTiers, getLiveTier, getBundleDiscount };

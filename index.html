@@ -918,9 +918,10 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
   function fmt(n){ return n.toLocaleString('en-US'); }
 
-  // ฿100 off per extra ticket beyond the first — matches
+  // ฿100 off per extra ticket beyond the first, capped at the 5-ticket
+  // bundle (no coupon exists past that) - matches
   // netlify/functions/_shared/tiers.js's getBundleDiscount exactly.
-  function bundleDiscount(qty){ return Math.max(0, qty - 1) * 100; }
+  function bundleDiscount(qty){ return Math.max(0, Math.min(qty, 5) - 1) * 100; }
 
   function renderTiers(tiers){
     tiers.forEach(function(t){

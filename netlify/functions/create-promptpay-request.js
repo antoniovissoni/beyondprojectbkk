@@ -4,7 +4,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const { fetchTiers, getLiveTier, getBundleDiscount } = require('./_shared/tiers');
 const { createPaymentRequest } = require('./_shared/hitpay');
 
-const MAX_QTY = 5;
+const MAX_QTY = 20;
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
