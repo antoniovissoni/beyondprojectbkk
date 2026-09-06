@@ -32,9 +32,9 @@
 <style>
 :root{
   /* palette: deep blue to sky blue, white type */
-  --acc:#0ea5e9; --acc-hi:#38bdf8; --acc-dim:#0284c7;
-  --red:#0369a1;
-  --grad:linear-gradient(120deg,var(--red) 0%,#67e8f9 100%);
+  --acc:#ff6b35; --acc-hi:#ff8552; --acc-dim:#e0521f;
+  --red:#c2410c;
+  --grad:linear-gradient(120deg,var(--red) 0%,#ffb37b 100%);
   --gold:#e3ba5c; --gold-hi:#f3d489; --gold-dim:#c69c39; --gold-ink:#1c1408;
   --gold-grad:linear-gradient(120deg,#c99a33 0%,#f3d489 48%,#d8ac45 100%);
   --bg:#0d0908;                   /* page background — warm near-black       */
@@ -68,7 +68,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   position:fixed;top:0;left:0;right:0;z-index:70;min-height:var(--bar);
   display:flex;align-items:center;justify-content:center;gap:1.25rem;
   background:var(--grad);color:#fff;padding:.5rem 1rem;
-  box-shadow:0 4px 24px rgba(14,165,233,.35);
+  box-shadow:0 4px 24px rgba(255,107,53,.35);
   transform:translateY(0);transition:transform .3s ease;
 }
 .stock.hide{transform:translateY(-100%)}
@@ -91,13 +91,13 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   min-height:95svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:calc(var(--bar) + 2.5rem) 0 3rem;position:relative;overflow:hidden;
   background:
-    radial-gradient(ellipse 120% 70% at 50% -10%,rgba(3,105,161,.30),transparent 62%),
-    radial-gradient(ellipse 90% 55% at 50% 108%,rgba(14,165,233,.16),transparent 68%),
+    radial-gradient(ellipse 120% 70% at 50% -10%,rgba(194,65,12,.30),transparent 62%),
+    radial-gradient(ellipse 90% 55% at 50% 108%,rgba(255,107,53,.16),transparent 68%),
     linear-gradient(180deg,#1a0b0b 0%,var(--bg) 58%);
 }
 .hero::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 45% at 50% 30%,rgba(103,232,249,.14),transparent 70%);
+  background:radial-gradient(ellipse 70% 45% at 50% 30%,rgba(255,181,123,.14),transparent 70%);
 }
 .hero > *{position:relative;z-index:1}
 
@@ -123,7 +123,7 @@ h1 .accent{
 .facts{margin-top:1.75rem;display:flex;flex-direction:column;gap:.5rem}
 .facts .line{font-size:1.125rem;font-weight:600;letter-spacing:-.015em}
 .facts .place{color:var(--acc);transition:color .15s ease}
-.facts .place:hover,.facts .place:focus-visible,.facts .place:active{color:#6ec6ff}
+.facts .place:hover,.facts .place:focus-visible,.facts .place:active{color:var(--acc-hi)}
 .facts .th{margin-top:.15rem}
 
 /* ─── FLAT BUTTONS — no gradients, no shadows, no lift ─── */
@@ -323,7 +323,7 @@ section{padding-block:5rem}
 
 /* Reset native <button> UA styling (font, color, appearance) so these
    don't pick up a platform accent color instead of the design's own. */
-.qty-back,.qty-close,.qty-opt{
+.qty-back,.qty-close,.qty-opt,.more-toggle,.qty-custom .buy,.qty-stepper button{
   font:inherit;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent;
   cursor:pointer;color:var(--ink);
 }
@@ -343,22 +343,26 @@ section{padding-block:5rem}
 .qty-close:hover{border-color:var(--ink-3);color:var(--ink)}
 .qty-close svg{width:1rem;height:1rem}
 
-.qty-list{display:flex;flex-direction:column;gap:.625rem}
+.qty-list{display:flex;flex-direction:column;gap:.75rem}
 .qty-opt{
-  width:100%;display:flex;align-items:center;gap:1rem;text-align:left;
-  background:var(--card);border:1px solid var(--line);border-radius:.875rem;
-  padding:1.05rem 1.25rem;transition:border-color .15s ease,background-color .15s ease;
+  position:relative;width:100%;display:flex;align-items:center;gap:1rem;text-align:left;
+  background:var(--card);border:2px solid var(--ink);border-radius:.875rem;
+  padding:1.05rem 1.25rem;box-shadow:3px 3px 0 var(--ink);
+  transition:background-color .15s ease,transform .1s ease,box-shadow .1s ease;
 }
-.qty-opt:hover{border-color:var(--acc);background:#241b18}
+.qty-opt:hover{background:#241b18}
+.qty-opt:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
 .qty-opt .meta{flex:1;min-width:0;display:flex;flex-direction:column}
 .qty-opt .n{display:block;font-size:1.0625rem;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:var(--ink)}
 .qty-opt .n small{font-size:.8125rem;font-weight:500;color:var(--ink-3);text-transform:none;margin-left:.45rem}
 .qty-opt .p{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin-top:.3rem}
 .qty-opt .p .orig{font-size:.8125rem;font-weight:600;color:var(--ink-3);text-decoration:line-through;text-decoration-thickness:1.5px}
-.qty-opt .p .amt{font-size:1rem;font-weight:700;color:var(--ink)}
+.qty-opt .p .amt{font-size:1.0625rem;font-weight:700;color:var(--acc)}
 .qty-opt .save{
-  font-size:.6875rem;font-weight:800;letter-spacing:.02em;color:#0a3d2e;
-  background:#7dd88a;border-radius:999px;padding:.2rem .55rem;white-space:nowrap;
+  position:absolute;top:-.65rem;right:1.1rem;
+  font-size:.625rem;font-weight:800;letter-spacing:.02em;color:#fff;
+  background:var(--acc);border-radius:.4rem;padding:.3rem .55rem;white-space:nowrap;
+  box-shadow:0 2px 6px -1px rgba(0,0,0,.4);
 }
 .qty-opt .arw{flex:none;color:var(--ink-3);font-size:1.125rem;transition:transform .15s ease,color .15s ease}
 .qty-opt:hover .arw{color:var(--acc);transform:translateX(3px)}
@@ -368,12 +372,47 @@ section{padding-block:5rem}
 .qty-opt.loading{opacity:.7}
 .qty-opt .spinner{
   display:none;flex:none;width:1.125rem;height:1.125rem;
-  border:2px solid rgba(255,255,255,.15);border-top-color:var(--ink);
+  border:2px solid rgba(255,255,255,.2);border-top-color:var(--acc);
   border-radius:50%;animation:qty-spin .6s linear infinite;
 }
 .qty-opt.loading .arw{display:none}
 .qty-opt.loading .spinner{display:inline-block}
 @keyframes qty-spin{to{transform:rotate(360deg)}}
+
+.more-toggle{
+  margin-top:.25rem;width:100%;padding:.8rem 1rem;border-radius:.875rem;
+  border:1.5px dashed var(--ink-3);background:transparent;
+  font-size:.8125rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:.4rem;
+  transition:border-color .15s ease,color .15s ease;color:var(--ink-2);
+}
+.more-toggle:hover{border-color:var(--acc);color:var(--ink)}
+.more-toggle[hidden]{display:none}
+
+.qty-custom{display:none;margin-top:.75rem;padding:1.25rem;border-radius:.875rem;background:var(--card);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.qty-custom.show{display:block}
+.qty-custom p{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.7rem;text-align:left}
+.qty-stepper{display:flex;align-items:center;justify-content:center;gap:1.25rem}
+.qty-stepper button{
+  width:2.5rem;height:2.5rem;border-radius:50%;border:2px solid var(--ink);background:var(--panel);
+  font-size:1.375rem;font-weight:700;flex:none;line-height:1;
+  transition:border-color .15s ease,color .15s ease,transform .1s ease;
+}
+.qty-stepper button:hover{border-color:var(--acc);color:var(--acc)}
+.qty-stepper button:active{transform:scale(.9)}
+.qty-stepper button:disabled{opacity:.35;pointer-events:none}
+.qty-stepper .num{font-size:1.625rem;font-weight:800;min-width:2.75rem;text-align:center;font-variant-numeric:tabular-nums;color:var(--ink)}
+.qty-custom .total{margin-top:.75rem;text-align:center;font-size:1rem;font-weight:700;color:var(--acc)}
+.qty-custom .buy{
+  margin-top:.9rem;width:100%;min-height:3.25rem;border:2px solid var(--ink);border-radius:.875rem;
+  background:var(--bg);font-size:1rem;font-weight:700;letter-spacing:-.01em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:.6rem;
+  box-shadow:3px 3px 0 var(--ink);
+  transition:background-color .15s ease,transform .1s ease,box-shadow .1s ease;
+}
+.qty-custom .buy b{color:var(--acc)}
+.qty-custom .buy:hover{background:#241b18}
+.qty-custom .buy:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
+.qty-custom .buy:disabled{opacity:.55;pointer-events:none}
 
 .qty-foot{margin-top:1.25rem;text-align:center;font-size:.75rem;color:var(--ink-3);line-height:1.6}
 .qty-foot .legal-note{display:block;margin-top:.5rem;font-size:.6875rem;color:var(--ink-3)}
@@ -393,10 +432,10 @@ section{padding-block:5rem}
 /* ─── PITCH BITS: badge, kickers ───────────────── */
 .eyebrow{
   display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;
-  border:1px solid rgba(3,105,161,.45);border-radius:999px;
-  background:linear-gradient(120deg,rgba(3,105,161,.18),rgba(103,232,249,.12));
+  border:1px solid rgba(194,65,12,.45);border-radius:999px;
+  background:linear-gradient(120deg,rgba(194,65,12,.18),rgba(255,181,123,.12));
   padding:.5rem .85rem;
-  font-size:.625rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#a5f3fc;
+  font-size:.625rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#fed7aa;
 }
 .eyebrow .dot{width:.375rem;height:.375rem;border-radius:50%;background:var(--red);flex:none}
 
@@ -653,7 +692,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
       </a>
     </div>
 
-    <a class="vip" href="https://luma.com/lrtfu7lg" target="_blank" rel="noopener">
+    <a class="vip" href="https://www.instagram.com/octave_rooftop/" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 8l4 3.5L12 5l4 6.5L20 8l-1.7 9H5.7L4 8Z"/>
       </svg>
@@ -755,7 +794,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
 <div class="sticky" id="sticky">
   <a class="s-ticket" id="sticky-ticket" href="#" data-track="ticket">Get ticket · <span id="sticky-price">฿600</span></a>
-  <a class="s-vip" href="https://luma.com/lrtfu7lg" target="_blank" rel="noopener">VIP</a>
+  <a class="s-vip" href="https://www.instagram.com/octave_rooftop/" target="_blank" rel="noopener">VIP</a>
 </div>
 
 <!-- ─── QUANTITY PICKER ────────────────────────────── -->
@@ -774,6 +813,21 @@ footer .legal-links a:hover{color:var(--ink-2)}
     </div>
 
     <div class="qty-list" id="qty-list"><!-- built by JS --></div>
+
+    <button type="button" class="more-toggle" id="qty-more-toggle" hidden>✨ Need more than 5? <span class="th">ต้องการมากกว่า 5 บัตร?</span></button>
+
+    <div class="qty-custom" id="qty-custom">
+      <p>Custom quantity <span class="th">จำนวนที่กำหนดเอง</span></p>
+      <div class="qty-stepper">
+        <button type="button" id="qty-custom-minus" aria-label="Fewer">−</button>
+        <span class="num" id="qty-custom-num">6</span>
+        <button type="button" id="qty-custom-plus" aria-label="More">+</button>
+      </div>
+      <p class="total" id="qty-custom-total">—</p>
+      <button type="button" class="buy" id="qty-custom-buy">
+        <span class="lbl" id="qty-custom-buy-lbl">Get tickets</span>
+      </button>
+    </div>
 
     <p class="qty-foot">
       <span id="qty-foot-price">฿600</span> per ticket · 1 drink included · You'll get an email with a QR for your tickets soon
@@ -836,10 +890,12 @@ footer .legal-links a:hover{color:var(--ink-2)}
      against whichever tier is live, so the price and
      sold-out state always match get-pricing.js/Stripe —
      nothing here is hardcoded once that call resolves. */
-  var MAX_QTY  = 5;
+  var MAX_QTY        = 5;
+  var MAX_CUSTOM_QTY = 20;
   var UNIT     = 600;     // fallback shown until get-pricing.js resolves
   var hasLive  = true;
   var checkingOut = false;
+  var customQty = MAX_QTY + 1;
 
   var TAG_TEXT = { sold: 'Sold out', live: 'Buy now', soon: 'Not open' };
 
@@ -849,6 +905,14 @@ footer .legal-links a:hover{color:var(--ink-2)}
   var payList     = document.getElementById('pay-list');
   var paySummary  = document.getElementById('pay-summary');
   var payError    = document.getElementById('pay-error');
+  var moreToggle   = document.getElementById('qty-more-toggle');
+  var customEl     = document.getElementById('qty-custom');
+  var customMinus  = document.getElementById('qty-custom-minus');
+  var customNum    = document.getElementById('qty-custom-num');
+  var customPlus   = document.getElementById('qty-custom-plus');
+  var customTotal  = document.getElementById('qty-custom-total');
+  var customBuy    = document.getElementById('qty-custom-buy');
+  var customBuyLbl = document.getElementById('qty-custom-buy-lbl');
   var lastFocus   = null;
   var selected    = null;
 
@@ -895,12 +959,26 @@ footer .legal-links a:hover{color:var(--ink-2)}
     }
   }
 
+  function updateCustom(){
+    if (!customEl) return;
+    customNum.textContent = customQty;
+    var discount = bundleDiscount(customQty);
+    var total = customQty * UNIT - discount;
+    customTotal.textContent = '฿' + fmt(total);
+    customMinus.disabled = customQty <= MAX_QTY + 1;
+    customPlus.disabled = customQty >= MAX_CUSTOM_QTY;
+    customBuyLbl.innerHTML = 'Get ' + customQty + ' tickets · <b>฿' + fmt(total) + '</b>';
+  }
+
   function renderQtyList(){
     if (!qtyList) return;
     if (!hasLive) {
       qtyList.innerHTML = '<p class="qty-soldout">All tickets are sold out.<br><span class="th">บัตรขายหมดแล้ว</span></p>';
+      if (moreToggle) moreToggle.hidden = true;
+      if (customEl) customEl.classList.remove('show');
       return;
     }
+    if (moreToggle) moreToggle.hidden = !!(customEl && customEl.classList.contains('show'));
     var html = '';
     for (var qty = 1; qty <= MAX_QTY; qty++) {
       var discount = bundleDiscount(qty);
@@ -1030,6 +1108,31 @@ footer .legal-links a:hover{color:var(--ink-2)}
       var opt = e.target.closest('.qty-opt');
       if (!opt) return;
       openPay(Number(opt.dataset.qty) || 1);
+    });
+  }
+  if (moreToggle) {
+    moreToggle.addEventListener('click', function(){
+      customQty = MAX_QTY + 1;
+      customEl.classList.add('show');
+      moreToggle.hidden = true;
+      updateCustom();
+    });
+  }
+  if (customMinus) {
+    customMinus.addEventListener('click', function(){
+      customQty = Math.max(MAX_QTY + 1, customQty - 1);
+      updateCustom();
+    });
+  }
+  if (customPlus) {
+    customPlus.addEventListener('click', function(){
+      customQty = Math.min(MAX_CUSTOM_QTY, customQty + 1);
+      updateCustom();
+    });
+  }
+  if (customBuy) {
+    customBuy.addEventListener('click', function(){
+      openPay(customQty);
     });
   }
   if (payList) {
@@ -1268,15 +1371,15 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
   /* ── CTA tracking ──────────────────────────── */
   document.addEventListener('click', function(e){
-    var opt = e.target.closest('.qty-opt');
+    var opt = e.target.closest('.qty-opt, #qty-custom-buy');
     var a   = e.target.closest('[data-track]');
     if (!opt && !a) return;
 
     loadPixel();
     if (typeof fbq === 'undefined') return;
 
-    if (opt && opt.dataset.qty) {                // a quantity was chosen
-      var q = Number(opt.dataset.qty) || 1;
+    if (opt && (opt.dataset.qty || opt.id === 'qty-custom-buy')) {  // a quantity was chosen
+      var q = opt.id === 'qty-custom-buy' ? customQty : (Number(opt.dataset.qty) || 1);
       fbq('track','InitiateCheckout',{
         content_name:'Final Release Ticket Sep 12',
         content_type:'product',
