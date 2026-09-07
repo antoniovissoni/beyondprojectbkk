@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const Stripe = require('stripe');
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-const { addGuestWithNextAvailableTicket } = require('./_shared/luma');
+const { addTicketsForBuyer } = require('./_shared/luma');
 
 const META_PIXEL_ID = '1700836710824786';
 const POSTHOG_API_KEY = 'phc_qPgeR9Rb8MqkxNTc7S4HkJDbaKJc6wUfDBVi8Y57VkPR';
@@ -100,13 +100,18 @@ async function addLumaGuest(session) {
 
   try {
     const eventId = process.env.LUMA_EVENT_ID;
-    const typesUsed = await addGuestWithNextAvailableTicket(eventId, {
+    const qty = Number(session.metadata.qty);
+    const result = await addTicketsForBuyer(eventId, {
       email,
       name: session.customer_details.name,
-      qty: Number(session.metadata.qty)
+      qty
     });
-    const breakdown = typesUsed.map((t) => t.name).join(', ');
-    console.log(`Added ${email} to Luma event ${eventId} (${session.metadata.qty}x: ${breakdown}) for session ${session.id}`);
+    const breakdown = result.typesUsed.map((t) => `${t.count}x ${t.name}`).join(', ');
+    console.log(
+      `Added ${qty} ticket(s) for ${email} to Luma event ${eventId} (${breakdown}) for session ${session.id} — ` +
+        `${result.wasExistingGuest ? 'existing guest topped up' : 'new guest'}, ` +
+        `${result.ticketsBefore} → ${result.ticketsAfter} ticket(s) total.`
+    );
   } catch (err) {
     console.error(`Failed to add Luma guest for session ${session.id}:`, err.message);
   }

@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const { getPaymentRequest, verifyWebhookSignature } = require('./_shared/hitpay');
-const { addGuestWithNextAvailableTicket } = require('./_shared/luma');
+const { addTicketsForBuyer } = require('./_shared/luma');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -74,13 +74,17 @@ async function addLumaGuest(record, qty) {
   console.log(`LUMA_EVENT_ID as read by this invocation: ${JSON.stringify(process.env.LUMA_EVENT_ID)}`);
 
   const eventId = process.env.LUMA_EVENT_ID;
-  const typesUsed = await addGuestWithNextAvailableTicket(eventId, {
+  const result = await addTicketsForBuyer(eventId, {
     email: record.email,
     name: record.name,
     qty
   });
-  const breakdown = typesUsed.map((t) => t.name).join(', ');
-  console.log(`Added ${record.email} to Luma event ${eventId} (${qty}x: ${breakdown}) for HitPay payment ${record.id}`);
+  const breakdown = result.typesUsed.map((t) => `${t.count}x ${t.name}`).join(', ');
+  console.log(
+    `Added ${qty} ticket(s) for ${record.email} to Luma event ${eventId} (${breakdown}) for HitPay payment ${record.id} — ` +
+      `${result.wasExistingGuest ? 'existing guest topped up' : 'new guest'}, ` +
+      `${result.ticketsBefore} → ${result.ticketsAfter} ticket(s) total.`
+  );
 }
 
 exports.handler = async (event) => {
