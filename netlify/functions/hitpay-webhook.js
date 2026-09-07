@@ -2,6 +2,8 @@ const crypto = require('crypto');
 const { getPaymentRequest, verifyWebhookSignature } = require('./_shared/hitpay');
 const { addGuestWithNextAvailableTicket } = require('./_shared/luma');
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const META_PIXEL_ID = '1700836710824786';
 const POSTHOG_API_KEY = 'phc_qPgeR9Rb8MqkxNTc7S4HkJDbaKJc6wUfDBVi8Y57VkPR';
 
@@ -115,16 +117,37 @@ exports.handler = async (event) => {
   // HitPay's webhook payload shape has varied across API/doc versions —
   // re-fetch the payment request directly and trust only its own `status`
   // field rather than the webhook body, before ever granting a Luma ticket.
+  //
+  // The fetch is retried a few times with short delays because HitPay
+  // delivers this webhook right as a payment completes, and re-fetching
+  // immediately after can still read a stale 'pending' status (read-after-
+  // write lag on their side) before it flips to 'completed' — previously
+  // that stale read was taken at face value and the ticket was silently
+  // dropped with zero trace in the logs.
+  const TERMINAL_NON_PAID_STATUSES = ['failed', 'expired', 'canceled', 'inactive'];
   let record;
   try {
     record = await getPaymentRequest(payload.id);
+    for (let attempt = 0; attempt < 3 && record.status !== 'completed' && !TERMINAL_NON_PAID_STATUSES.includes(record.status); attempt++) {
+      await sleep(1500);
+      record = await getPaymentRequest(payload.id);
+    }
   } catch (err) {
     console.error(`Failed to fetch HitPay payment request ${payload.id}:`, err.message);
     return { statusCode: 502, body: 'hitpay lookup failed' };
   }
 
-  if (record.status !== 'completed') {
+  // Terminal, non-paid outcomes: nothing to do, and nothing to retry.
+  if (TERMINAL_NON_PAID_STATUSES.includes(record.status)) {
     return { statusCode: 200, body: 'ok' };
+  }
+
+  // Still not resolved after retrying inline — ask HitPay to redeliver this
+  // webhook later rather than accepting 200 and losing the ticket for good,
+  // the same way a failed Luma add is handled below.
+  if (record.status !== 'completed') {
+    console.log(`HitPay payment ${record.id} still not completed after retries (status: ${record.status}) — asking for redelivery.`);
+    return { statusCode: 503, body: 'not yet completed, retry' };
   }
 
   if (!record.email) {
