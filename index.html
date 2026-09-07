@@ -896,6 +896,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
   var hasLive  = true;
   var checkingOut = false;
   var customQty = MAX_QTY + 1;
+  var DISCOUNTS = {};     // live Stripe coupon amounts, keyed by qty, from get-pricing.js
 
   var TAG_TEXT = { sold: 'Sold out', live: 'Buy now', soon: 'Not open' };
 
@@ -918,10 +919,18 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
   function fmt(n){ return n.toLocaleString('en-US'); }
 
-  // ฿100 off per extra ticket beyond the first, capped at the 5-ticket
-  // bundle (no coupon exists past that) - matches
-  // netlify/functions/_shared/tiers.js's getBundleDiscount exactly.
-  function bundleDiscount(qty){ return Math.max(0, Math.min(qty, 5) - 1) * 100; }
+  // Reads the live Stripe coupon amount fetched from get-pricing.js so the
+  // displayed price always matches what's actually charged, even if a
+  // coupon's amount is changed in Stripe without a code deploy. Falls back
+  // to the static ฿100-per-ticket formula (matching
+  // netlify/functions/_shared/tiers.js's getBundleDiscount) until that
+  // fetch resolves. No coupon exists past the 5-ticket bundle, so any
+  // larger quantity is capped at DISCOUNTS[5].
+  function bundleDiscount(qty){
+    var capped = Math.min(qty, 5);
+    if (DISCOUNTS[capped] !== undefined) return DISCOUNTS[capped];
+    return Math.max(0, capped - 1) * 100;
+  }
 
   function renderTiers(tiers){
     tiers.forEach(function(t){
@@ -1012,6 +1021,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
       hasLive = !!live;
       UNIT    = live ? live.unitAmount : UNIT;
       MAX_QTY = data.maxQty || MAX_QTY;
+      DISCOUNTS = data.discounts || {};
       if (data.tiers) renderTiers(data.tiers);
       renderPrice();
       renderQtyList();
