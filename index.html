@@ -11,8 +11,8 @@
         person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
     })
 </script>
-<title>BEYOND - LATIN PARTY</title>
-<meta name="description" content="The best Latin party in Asia. Reggaeton and perreo all night, live DJs, 1 drink included. Saturday September 12, 5PM, Octave Rooftop - the best rooftop in Bangkok.">
+<title>BEYOND · Rooftop Latin Party</title>
+<meta name="description" content="Rooftop Latin Party at Octave Rooftop, the best rooftop in Bangkok. Reggaeton and perreo all night, an international DJ, live DJs, 1 drink included. Saturday, September 12, 5PM until late.">
 <meta name="theme-color" content="#0d0908">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" as="image" href="assets/logo-wide.webp">
@@ -21,8 +21,8 @@
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://beyondprojectbkk.com/">
-<meta property="og:title" content="The Best Latin Party in Asia">
-<meta property="og:description" content="Reggaeton and perreo, back to back · 1 drink included. Sat Sep 12 · 5PM · Octave Rooftop - the best rooftop in Bangkok.">
+<meta property="og:title" content="Rooftop Latin Party in Bangkok">
+<meta property="og:description" content="Reggaeton &amp; perreo, back to back · International DJ · 1 drink included · Octave Rooftop. Sat Sep 12 · 5PM · Octave Rooftop, Bangkok.">
 <meta property="og:image" content="https://beyondprojectbkk.com/assets/thumbnail.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="2000">
@@ -31,10 +31,10 @@
 
 <style>
 :root{
-  /* palette: deep blue to sky blue, white type */
-  --acc:#ff6b35; --acc-hi:#ff8552; --acc-dim:#e0521f;
-  --red:#c2410c;
-  --grad:linear-gradient(120deg,var(--red) 0%,#ffb37b 100%);
+  /* palette: deep pink, white type */
+  --acc:#ec4899; --acc-hi:#f472b6; --acc-dim:#db2777;
+  --red:#db2777;
+  --grad:linear-gradient(120deg,var(--red) 0%,#f9a8d4 100%);
   --gold:#e3ba5c; --gold-hi:#f3d489; --gold-dim:#c69c39; --gold-ink:#1c1408;
   --gold-grad:linear-gradient(120deg,#c99a33 0%,#f3d489 48%,#d8ac45 100%);
   --bg:#0d0908;                   /* page background — warm near-black       */
@@ -68,7 +68,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   position:fixed;top:0;left:0;right:0;z-index:70;min-height:var(--bar);
   display:flex;align-items:center;justify-content:center;gap:1.25rem;
   background:var(--acc);color:#fff;padding:.5rem 1rem;
-  box-shadow:0 4px 24px rgba(255,107,53,.35);
+  box-shadow:0 4px 24px rgba(236,72,153,.35);
   transform:translateY(0);transition:transform .3s ease;
 }
 .stock.hide{transform:translateY(-100%)}
@@ -91,28 +91,24 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   min-height:95svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:calc(var(--bar) + 2.5rem) 0 3rem;position:relative;overflow:hidden;
   background:
-    radial-gradient(ellipse 120% 70% at 50% -10%,rgba(194,65,12,.30),transparent 62%),
-    radial-gradient(ellipse 90% 55% at 50% 108%,rgba(255,107,53,.16),transparent 68%),
-    linear-gradient(180deg,#1a0b0b 0%,var(--bg) 58%);
+    radial-gradient(ellipse 120% 70% at 50% -10%,rgba(219,39,119,.30),transparent 62%),
+    radial-gradient(ellipse 90% 55% at 50% 108%,rgba(236,72,153,.16),transparent 68%),
+    linear-gradient(180deg,#1a0b12 0%,var(--bg) 58%);
 }
 .hero::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 45% at 50% 30%,rgba(255,181,123,.14),transparent 70%);
+  background:radial-gradient(ellipse 70% 45% at 50% 30%,rgba(244,114,182,.14),transparent 70%);
 }
 .hero > *{position:relative;z-index:1}
 
 .brand{width:min(9rem,34vw);margin:0 auto 1.75rem}
 
 h1{
-  font-weight:800;line-height:.93;
-  letter-spacing:-.04em;text-transform:uppercase;
+  font-size:clamp(2.75rem,13vw,4.75rem);font-weight:800;line-height:.93;
+  letter-spacing:-.05em;text-transform:uppercase;
 }
 h1 span{display:block}
-h1 .lead{font-size:clamp(1.5rem,7.5vw,2.5rem);color:var(--ink)}
-h1 .accent{
-  font-size:clamp(2.5rem,11.5vw,4rem);margin-top:.1rem;
-  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
-}
+h1 .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 
 .edition{
   margin-top:1.25rem;font-size:.75rem;font-weight:600;letter-spacing:.26em;
@@ -432,10 +428,10 @@ section{padding-block:5rem}
 /* ─── PITCH BITS: badge, kickers ───────────────── */
 .eyebrow{
   display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;
-  border:1px solid rgba(194,65,12,.45);border-radius:999px;
-  background:linear-gradient(120deg,rgba(194,65,12,.18),rgba(255,181,123,.12));
+  border:1px solid rgba(219,39,119,.45);border-radius:999px;
+  background:linear-gradient(120deg,rgba(219,39,119,.18),rgba(244,114,182,.12));
   padding:.5rem .85rem;
-  font-size:.625rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#fed7aa;
+  font-size:.625rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#fbcfe8;
 }
 .eyebrow .dot{width:.375rem;height:.375rem;border-radius:50%;background:var(--red);flex:none}
 
@@ -535,18 +531,19 @@ footer .legal-links a:hover{color:var(--ink-2)}
     <img class="brand" src="assets/logo-wide.webp" alt="BEYOND"
          width="1600" height="336" fetchpriority="high" decoding="async">
 
-    <p class="eyebrow"><span class="dot"></span>Reggaeton · Perreo · Latin Night</p>
+    <p class="eyebrow"><span class="dot"></span>The best Latin party in Asia</p>
 
-    <h1><span class="lead">Bangkok's Best</span><span class="accent">Latin Party</span></h1>
+    <h1><span class="accent">Rooftop</span><span>Latin Party</span></h1>
     <p class="pitch">
-      A Latin night at Octave Rooftop - the best rooftop in Bangkok - reggaeton and perreo,
-      back to back, no filler sets. <b>Dancing until late.</b>
-      <span class="th">Octave Rooftop เร็กเก้ตอนทั้งคืน · รวมเครื่องดื่ม 1 แก้ว</span>
+      A rooftop takeover at Octave Rooftop — the best rooftop in Bangkok — dedicated to
+      reggaeton, perreo and the Latin hits you already know the words to.
+      <br><b>Now with an international DJ flying in for the night.</b>
+      <span class="th">ปาร์ตี้รูฟท็อปที่ Octave Rooftop เบสต์รูฟท็อปในกรุงเทพฯ พร้อมดีเจนานาชาติบินตรงมาเล่นในคืนนี้</span>
     </p>
 
     <div class="facts">
       <p class="line">
-        Saturday, September 12 · 5PM Until Late
+        📅 Saturday, September 12 · 🕘 5PM Until Late
         <span class="th">วันเสาร์ที่ 12 กันยายน · 17:00 น. ยาวถึงดึก</span>
       </p>
       <a class="line place" href="https://maps.app.goo.gl/X6qq4H61oTbGnikeA" target="_blank" rel="noopener">
@@ -556,8 +553,8 @@ footer .legal-links a:hover{color:var(--ink-2)}
     </div>
 
     <a class="btn" href="#tickets">
-      Get tickets now
-      <span class="th">ซื้อบัตรเลย</span>
+      Get your tickets
+      <span class="th">ซื้อบัตรของคุณ</span>
     </a>
   </div>
 </header>
@@ -572,8 +569,8 @@ footer .legal-links a:hover{color:var(--ink-2)}
     <img class="video-logo" src="assets/logo-wide.webp" alt="BEYOND" width="1600" height="336" loading="lazy" decoding="async">
     <div class="video-cta">
       <a class="btn hero-cta" href="#tickets">
-        Get tickets now
-        <span class="th">ซื้อบัตรเลย</span>
+        Get your tickets
+        <span class="th">ซื้อบัตรของคุณ</span>
       </a>
     </div>
   </div>
@@ -584,25 +581,39 @@ footer .legal-links a:hover{color:var(--ink-2)}
   <div class="wrap">
     <span class="kicker">What you're getting into</span>
     <h2 class="title">
-      The best
-      <span class="accent">Latin party in Asia</span>
-      <span class="th">ปาร์ตี้ลาตินที่ดีที่สุดในเอเชีย</span>
+      Rooftop
+      <span class="accent">Latin Night</span>
+      <span class="th">คืนปาร์ตี้ลาตินบนรูฟท็อป</span>
     </h2>
-    <p class="lede">One night, one dance floor, and every reggaeton anthem you know the words to.</p>
+    <p class="lede">One rooftop, one night, and every reggaeton anthem you know the words to.</p>
 
     <div class="perks">
       <div class="perk rv">
         <span class="em" aria-hidden="true">🌆</span>
         <span class="txt">
-          <b>Latin night at Octave Rooftop, the best rooftop in Bangkok</b>
-          <span class="th">ปาร์ตี้ลาตินที่ Octave Rooftop เบสต์รูฟท็อปในกรุงเทพฯ</span>
+          <b>Rooftop takeover — a full night at Octave Rooftop, the best rooftop in Bangkok</b>
+          <span class="th">ปาร์ตี้รูฟท็อปเต็มคืนที่ Octave Rooftop เบสต์รูฟท็อปในกรุงเทพฯ</span>
+        </span>
+      </div>
+      <div class="perk rv">
+        <span class="em" aria-hidden="true">🌍</span>
+        <span class="txt">
+          <b>International DJ flying in for the night</b>
+          <span class="th">ดีเจนานาชาติบินตรงมาเล่นในคืนนี้</span>
+        </span>
+      </div>
+      <div class="perk rv">
+        <span class="em" aria-hidden="true">🔥</span>
+        <span class="txt">
+          <b>Reggaeton, perreo and Latin anthems</b>
+          <span class="th">เร็กเก้ตอนและเปร์เรโอสลับกันทั้งคืน</span>
         </span>
       </div>
       <div class="perk rv">
         <span class="em" aria-hidden="true">🎧</span>
         <span class="txt">
-          <b>Live DJs, reggaeton and perreo back to back</b>
-          <span class="th">ดีเจสด เร็กเก้ตอนและเปร์เรโอสลับกันทั้งคืน</span>
+          <b>Live DJs all night, no filler sets</b>
+          <span class="th">ดีเจสดตลอดคืน ไม่มีเซ็ตขายเวลา</span>
         </span>
       </div>
       <div class="perk rv gold">
@@ -620,13 +631,6 @@ footer .legal-links a:hover{color:var(--ink-2)}
         </span>
       </div>
       <div class="perk rv">
-        <span class="em" aria-hidden="true">🌃</span>
-        <span class="txt">
-          <b>Bangkok's Latin crowd, out in full force</b>
-          <span class="th">คนไทยสายลาติน มารวมตัวกันคืนนี้</span>
-        </span>
-      </div>
-      <div class="perk rv">
         <span class="em" aria-hidden="true">⏰</span>
         <span class="txt">
           <b>Doors at 5PM, open till late</b>
@@ -634,6 +638,26 @@ footer .legal-links a:hover{color:var(--ink-2)}
         </span>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ─── LOCATION ───────────────────────────────────── -->
+<section id="location">
+  <div class="wrap">
+    <span class="kicker">Location</span>
+    <h2 class="title">
+      Octave Rooftop, Bangkok
+      <span class="th">Octave Rooftop · เบสต์รูฟท็อปในกรุงเทพฯ</span>
+    </h2>
+    <p class="lede">Rooftop atmosphere above Bangkok — easy to find, hard to leave.</p>
+
+    <div class="map-box" id="map-box">
+      <div class="map-skel">Map</div>
+    </div>
+
+    <a class="btn-ghost map-link" href="https://maps.app.goo.gl/X6qq4H61oTbGnikeA" target="_blank" rel="noopener">
+      Open in Maps
+    </a>
   </div>
 </section>
 
@@ -692,13 +716,6 @@ footer .legal-links a:hover{color:var(--ink-2)}
       </a>
     </div>
 
-    <a class="vip" href="https://www.instagram.com/octave_rooftop/" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 8l4 3.5L12 5l4 6.5L20 8l-1.7 9H5.7L4 8Z"/>
-      </svg>
-      VIP tables
-    </a>
-
     <ul class="incl">
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
@@ -710,13 +727,20 @@ footer .legal-links a:hover{color:var(--ink-2)}
       </li>
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
-        <span><b>Live DJs all night</b> - reggaeton and perreo, back to back</span>
+        <span><b>Live DJs all night</b> - reggaeton and perreo, plus an international DJ set</span>
       </li>
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
         <span><b>Locked-in price</b> for this tier - it goes up once it sells out</span>
       </li>
     </ul>
+
+    <a class="vip" href="https://www.instagram.com/octave_rooftop/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 8l4 3.5L12 5l4 6.5L20 8l-1.7 9H5.7L4 8Z"/>
+      </svg>
+      Book a VIP table
+    </a>
 
     <p class="fine">
       Instant confirmation. Entry by QR code.
@@ -763,26 +787,6 @@ footer .legal-links a:hover{color:var(--ink-2)}
   </div>
   <div class="marquee"><div class="track" id="track-a"></div></div>
   <div class="marquee"><div class="track rev" id="track-b"></div></div>
-</section>
-
-<!-- ─── LOCATION ───────────────────────────────────── -->
-<section>
-  <div class="wrap">
-    <span class="kicker">The venue</span>
-    <h2 class="title">
-      Octave Rooftop
-      <span class="th">Octave Rooftop · เบสต์รูฟท็อปในกรุงเทพฯ</span>
-    </h2>
-    <p class="lede">The best rooftop in Bangkok - right in the middle of the city, here's how to find it.</p>
-
-    <div class="map-box" id="map-box">
-      <div class="map-skel">Map</div>
-    </div>
-
-    <a class="btn-ghost map-link" href="https://maps.app.goo.gl/X6qq4H61oTbGnikeA" target="_blank" rel="noopener">
-      Open in Maps
-    </a>
-  </div>
 </section>
 </main>
 
