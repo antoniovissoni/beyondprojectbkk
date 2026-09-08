@@ -271,8 +271,14 @@ section{padding-block:5rem}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ─── LOCATION ─────────────────────────────────── */
-.map-box{
+.place-photo{
   margin-top:2.5rem;border-radius:.875rem;overflow:hidden;
+  border:1px solid var(--line);background:var(--panel);
+  aspect-ratio:3/2;
+}
+.place-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.map-box{
+  margin-top:1rem;border-radius:.875rem;overflow:hidden;
   border:1px solid var(--line);background:var(--panel);
   aspect-ratio:3/2;position:relative;
 }
@@ -546,7 +552,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
         📅 Saturday, September 12 · 🕘 5PM Until Late
         <span class="th">วันเสาร์ที่ 12 กันยายน · 17:00 น. ยาวถึงดึก</span>
       </p>
-      <a class="line place" href="https://maps.app.goo.gl/X6qq4H61oTbGnikeA" target="_blank" rel="noopener">
+      <a class="line place" href="#location">
         Octave Rooftop
         <span class="th">Octave Rooftop · เบสต์รูฟท็อปในกรุงเทพฯ</span>
       </a>
@@ -650,6 +656,10 @@ footer .legal-links a:hover{color:var(--ink-2)}
       <span class="th">Octave Rooftop · เบสต์รูฟท็อปในกรุงเทพฯ</span>
     </h2>
     <p class="lede">Rooftop atmosphere above Bangkok, easy to find, hard to leave.</p>
+
+    <div class="place-photo">
+      <img src="assets/place.webp" alt="Octave Rooftop, Bangkok" width="1546" height="1017" loading="lazy" decoding="async">
+    </div>
 
     <div class="map-box" id="map-box">
       <div class="map-skel">Map</div>
