@@ -422,6 +422,18 @@ section{padding-block:5rem}
 .qty-foot .legal-note a:hover{color:var(--ink)}
 .pay-summary{text-align:center;font-size:.8125rem;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.04em;margin:-.5rem 0 1.25rem}
 .qty-error{margin-top:.875rem;text-align:center;font-size:.8125rem;font-weight:600;color:var(--acc)}
+
+.pay-email{margin-bottom:1.25rem}
+.pay-email-input{
+  width:100%;min-height:3.25rem;border-radius:.875rem;padding:0 1.1rem;
+  background:var(--card);border:2px solid var(--ink);color:var(--ink);
+  font:inherit;font-size:1rem;-webkit-appearance:none;appearance:none;
+  transition:border-color .15s ease;
+}
+.pay-email-input::placeholder{color:var(--ink-3)}
+.pay-email-input:focus{outline:none;border-color:var(--acc)}
+.pay-email .th{display:block;margin-top:.5rem;text-align:center;font-size:.75rem;color:var(--ink-3)}
+.pay-email-error{margin:-.75rem 0 1.25rem}
 .qty-soldout{text-align:center;padding:2rem 1rem;color:var(--ink-2);font-weight:600;line-height:1.6}
 .qty-soldout .th{margin-top:.35rem;font-size:.8125rem;color:var(--ink-3);font-weight:400}
 
@@ -874,6 +886,15 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
     <p class="pay-summary" id="pay-summary"></p>
 
+    <div class="pay-email">
+      <input class="pay-email-input" type="email" id="pay-email" inputmode="email" autocomplete="email"
+             placeholder="you@email.com" aria-label="Email for your ticket · อีเมลสำหรับรับบัตร">
+      <span class="th">Needed to send your PromptPay ticket QR · จำเป็นสำหรับส่ง QR บัตรพร้อมเพย์ของคุณ</span>
+    </div>
+
+    <p class="qty-error pay-email-error" id="pay-email-error" hidden>Enter a valid email to receive your ticket.<span
+        class="th" style="display:block;font-size:.75rem;opacity:.8;margin-top:.25rem">กรุณากรอกอีเมลที่ถูกต้องเพื่อรับบัตรของคุณ</span></p>
+
     <p class="qty-error" id="pay-error" hidden>Something went wrong. Please try again.<span
         class="th" style="display:block;font-size:.75rem;opacity:.8;margin-top:.25rem">เกิดข้อผิดพลาด กรุณาลองอีกครั้ง</span></p>
 
@@ -920,6 +941,8 @@ footer .legal-links a:hover{color:var(--ink-2)}
   var payList     = document.getElementById('pay-list');
   var paySummary  = document.getElementById('pay-summary');
   var payError    = document.getElementById('pay-error');
+  var payEmailInput = document.getElementById('pay-email');
+  var payEmailError = document.getElementById('pay-email-error');
   var moreToggle   = document.getElementById('qty-more-toggle');
   var customEl     = document.getElementById('qty-custom');
   var customMinus  = document.getElementById('qty-custom-minus');
@@ -1107,6 +1130,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
       paySummary.textContent = qty + (qty === 1 ? ' Ticket · ' : ' Tickets · ') + '฿' + fmt(selected.price);
     }
     if (payError) payError.hidden = true;
+    if (payEmailError) payEmailError.hidden = true;
     hide(qtyOverlay, false);
     show(payOverlay);
   }
@@ -1165,6 +1189,19 @@ footer .legal-links a:hover{color:var(--ink-2)}
       var opt = e.target.closest('.qty-opt');
       if (!opt || !selected || checkingOut) return;
       var method = opt.dataset.method;
+      var email = payEmailInput ? payEmailInput.value.trim() : '';
+
+      // HitPay's PromptPay checkout doesn't reliably collect an email of its
+      // own — without one, the webhook can't add the Luma guest or fire the
+      // Meta/PostHog Purchase event, even though the payment itself succeeds.
+      // Card checkout is unaffected: Stripe's own hosted page always
+      // collects the buyer's email regardless of what's sent here.
+      if (method === 'promptpay' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (payEmailError) payEmailError.hidden = false;
+        if (payEmailInput) payEmailInput.focus();
+        return;
+      }
+      if (payEmailError) payEmailError.hidden = true;
 
       checkingOut = true;
       if (payError) payError.hidden = true;
@@ -1183,7 +1220,7 @@ footer .legal-links a:hover{color:var(--ink-2)}
         ? '/.netlify/functions/create-promptpay-request'
         : '/.netlify/functions/create-checkout-session';
       var body = method === 'promptpay'
-        ? { qty: selected.qty }
+        ? { qty: selected.qty, email: email }
         : { qty: selected.qty, dest: 'main' };
 
       fetch(endpoint, {
