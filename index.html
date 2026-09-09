@@ -285,6 +285,21 @@ section{padding-block:5rem}
 .map-box iframe{width:100%;height:100%;border:0;display:block}
 .map-skel{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase}
 .map-link{margin-top:1.25rem}
+.rain-plan{
+  margin-top:1.5rem;display:flex;gap:1.25rem;align-items:center;
+  background:var(--panel);border:1px solid var(--line);border-radius:.875rem;padding:1.125rem;
+}
+.rain-photo{
+  flex:none;width:6.5rem;aspect-ratio:2/3;border-radius:.625rem;overflow:hidden;background:var(--card);
+}
+.rain-photo img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.rain-plan p{font-size:.875rem;color:var(--ink-2);line-height:1.5}
+.rain-plan p b{color:var(--ink)}
+.rain-plan p .th{display:block;margin-top:.35rem;font-size:.75rem}
+@media (max-width:480px){
+  .rain-plan{gap:1rem;padding:1rem}
+  .rain-photo{width:5rem}
+}
 
 /* ─── STICKY BAR ───────────────────────────────── */
 .sticky{
@@ -671,6 +686,16 @@ footer .legal-links a:hover{color:var(--ink-2)}
 
     <div class="place-photo">
       <img src="assets/place.webp" alt="Octave Rooftop, Bangkok" width="1546" height="1017" loading="lazy" decoding="async">
+    </div>
+
+    <div class="rain-plan">
+      <div class="rain-photo">
+        <img src="assets/covered.jpeg" alt="Covered section of Octave Rooftop" width="1024" height="1536" loading="lazy" decoding="async">
+      </div>
+      <p>
+        <b>Rain or shine, we've got you covered.</b> Octave Rooftop has a covered section built for exactly this, so a shower won't stop the party.
+        <span class="th">ฝนตกก็เที่ยวได้ Octave Rooftop มีโซนมีหลังคาคลุมไว้พร้อมรับมือ ปาร์ตี้ไม่มีสะดุดแม้ฝนตก</span>
+      </p>
     </div>
 
     <div class="map-box" id="map-box">
